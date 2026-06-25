@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
+import PublicSiteNav from './PublicSiteNav';
+import ContactSection from './ContactSection';
 import '../styles/landing.css';
+import '../styles/contact.css';
 
 type DashboardSource = {
   label: string;
@@ -27,15 +30,6 @@ const ribbonImages = [
   { src: '/pictures/573882467_1451611673632222_5772695783812924339_n.jpg', position: 'center center' },
 ];
 
-const NAV_LINKS = [
-  { label: 'Home', href: '#top' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'About Central Link', href: '#about' },
-  { label: 'Our Achievements', href: '#achievements' },
-  { label: 'Exco', href: '#exco' },
-  { label: 'Contact Us', href: '#contact' },
-] as const;
-
 const shuffleImages = <ImageType,>(images: ImageType[]) => {
   const shuffledImages = [...images];
 
@@ -51,6 +45,7 @@ export default function LandingPage<DashboardKey extends string>({
   dashboardOptions,
 }: LandingPageProps<DashboardKey>) {
   const navigate = useNavigate();
+  const { hash } = useLocation();
   const landingPageRef = useRef<HTMLDivElement>(null);
   const [randomizedRibbonImages] = useState(() => shuffleImages(ribbonImages));
   const [randomizedSlideshowImages] = useState(() => shuffleImages(ribbonImages));
@@ -147,38 +142,24 @@ export default function LandingPage<DashboardKey extends string>({
     };
   }, []);
 
+  useEffect(() => {
+    if (!hash) return;
+
+    const targetId = hash.replace('#', '');
+    const target = document.getElementById(targetId);
+
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [hash]);
+
   return (
     <div ref={landingPageRef} id="top" className="landing-page">
       <div className="landing-background" aria-hidden="true" />
       <div className="landing-hero-overlay" aria-hidden="true" />
       <div className="landing-closing-overlay" aria-hidden="true" />
 
-      <header className="landing-nav animate-fade-rise">
-        <div className="landing-nav-inner">
-          <div className="landing-nav-leading">
-            <div className="landing-wordmark">
-              <img src="/toastmasters-logo.png" alt="Toastmasters International logo" />
-              <span>Central Link Toastmasters Club</span>
-            </div>
-
-            <nav className="landing-nav-links" aria-label="Primary navigation">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className={link.label === 'Home' ? 'is-active' : undefined}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-
-          <Link className="landing-nav-signin" to="/login">
-            Sign In
-          </Link>
-        </div>
-      </header>
+      <PublicSiteNav activeLabel="Home" />
 
       <main className="landing-main">
         <section className="landing-hero" aria-labelledby="landing-title">
@@ -286,6 +267,8 @@ export default function LandingPage<DashboardKey extends string>({
           ))}
         </div>
       </section>
+
+      <ContactSection />
 
       <footer className="landing-footer">
         <span>© 2026 Central Link Toastmasters</span>

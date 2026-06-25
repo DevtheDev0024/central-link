@@ -26,6 +26,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage dashboardOptions={dashboardOptions} />} />
+        <Route path="/contact" element={<Navigate to={{ pathname: '/', hash: '#contact' }} replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/club/:yearKey" element={<ClubDashboardPage />} />
         <Route
