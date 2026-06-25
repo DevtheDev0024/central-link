@@ -1,12 +1,17 @@
 import { useState } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import MemberDashboard from './components/MemberDashboard';
+import InDevelopmentPage from './components/memberPortal/InDevelopmentPage';
+import MemberPortalLayout from './components/memberPortal/MemberPortalLayout';
+import PerformanceDashboardPage from './components/memberPortal/PerformanceDashboardPage';
+import { memberPortalNav } from './components/memberPortal/navItems';
 import ErrorScreen from './components/ui/ErrorScreen';
 import LoadingScreen from './components/ui/LoadingScreen';
 import { DASHBOARD_SOURCES, type DashboardYearKey } from './config/dashboardYears';
 import { useDashboardData } from './hooks/useDashboardData';
 
-function App() {
+function DashboardApp() {
   const [selectedDashboardKey, setSelectedDashboardKey] = useState<DashboardYearKey | null>(null);
 
   const {
@@ -65,6 +70,29 @@ function App() {
       }}
       onChangeDashboardYear={handleChangeDashboardYear}
     />
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/member-portal" element={<MemberPortalLayout />}>
+          <Route index element={<PerformanceDashboardPage />} />
+          {memberPortalNav
+            .filter((item) => item.slug)
+            .map((item) => (
+              <Route
+                key={item.slug}
+                path={item.slug}
+                element={<InDevelopmentPage title={item.label} icon={item.icon} />}
+              />
+            ))}
+        </Route>
+        <Route path="/performance-dashboard" element={<Navigate to="/member-portal" replace />} />
+        <Route path="*" element={<DashboardApp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

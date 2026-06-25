@@ -11,12 +11,12 @@ export default function BadgeDetailOverlay({ badge, isClosing, onClose }: BadgeD
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/72 px-5 py-8 text-center backdrop-blur-2xl ${
+      className={`badge-detail-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/72 px-5 py-8 text-center backdrop-blur-2xl ${
         isClosing ? 'animate-fade-out' : 'animate-fade-in'
       }`}
       onClick={onClose}
     >
-      <div className="flex w-full max-w-3xl flex-col items-center animate-slide-up">
+      <div className="badge-detail-content flex w-full max-w-3xl flex-col items-center animate-slide-up">
         <img
           src={badge.imageSrc}
           alt=""
@@ -26,7 +26,7 @@ export default function BadgeDetailOverlay({ badge, isClosing, onClose }: BadgeD
         <h3 className="mt-6 font-['GothamCondensed-Bold',sans-serif] text-[3.5rem] uppercase italic leading-none tracking-[0.04em] text-toastmasters-navy drop-shadow-[0_2px_10px_rgba(255,255,255,0.72)] sm:text-[5rem]">
           {badge.name}
         </h3>
-        <p className="mt-5 max-w-2xl font-['MyriadPro-Bold','MyriadPro-Light',Arial,sans-serif] text-lg font-bold leading-7 text-black sm:text-xl">
+        <p className="mt-5 max-w-2xl font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold leading-7 text-black">
           {badge.description}
         </p>
         <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-toastmasters-navy sm:text-lg">

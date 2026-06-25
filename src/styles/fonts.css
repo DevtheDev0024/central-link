@@ -1,49 +1,195 @@
-@font-face {
-  font-family: 'GothamCondensed-Bold';
-  src:
-    local('Gotham Condensed Bold'),
-    local('GothamCondensed-Bold'),
-    url('https://static.wfonts.com/data/2016/07/02/gotham-condensed/GothamCondensed-Bold.otf') format('opentype');
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'GothamCondensed-Light';
-  src:
-    local('Gotham Condensed Light'),
-    local('GothamCondensed-Light'),
-    url('https://static.wfonts.com/data/2016/07/02/gotham-condensed/GothamCondensed-Light.otf') format('opentype');
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-}
-
+/* ── Myriad Pro ─────────────────────────────────────────────────────────── */
 @font-face {
   font-family: 'MyriadPro-Light';
-  src:
-    local('Myriad Pro Light'),
-    local('MyriadPro-Light'),
-    url('https://static.wfonts.com/data/2016/06/13/myriad-pro/MyriadPro-Light.otf') format('opentype');
+  src: local('Myriad Pro Light'), url('/fonts/MyriadPro-Light.otf') format('opentype');
   font-style: normal;
-  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MyriadPro-Regular';
+  src: local('Myriad Pro'), url('/fonts/MYRIADPRO-REGULAR.OTF') format('opentype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MyriadPro-Semibold';
+  src: local('Myriad Pro Semibold'), url('/fonts/MYRIADPRO-SEMIBOLD.OTF') format('opentype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MyriadPro-SemiboldIt';
+  src: local('Myriad Pro Semibold Italic'), url('/fonts/MYRIADPRO-SEMIBOLDIT.OTF') format('opentype');
+  font-style: italic;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'MyriadPro-Bold';
-  src:
-    local('Myriad Pro Bold'),
-    local('MyriadPro-Bold'),
-    url('https://static.wfonts.com/data/2016/06/13/myriad-pro/MyriadPro-Bold.otf') format('opentype');
+  src: local('Myriad Pro Bold'), url('/fonts/MYRIADPRO-BOLD.OTF') format('opentype');
   font-style: normal;
-  font-weight: 700;
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'MyriadPro-BoldIt';
+  src: local('Myriad Pro Bold Italic'), url('/fonts/MYRIADPRO-BOLDIT.OTF') format('opentype');
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Gotham Condensed ───────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'GothamCondensed-Thin';
+  src: local('GothamCond-Thin'), url('/fonts/GothamCond-Thin.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-ThinIt';
+  src: local('GothamCond-ThinItalic'), url('/fonts/GothamCond-ThinItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-XLight';
+  src: local('GothamCond-XLight'), url('/fonts/GothamCond-XLight.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-XLightIt';
+  src: local('GothamCond-XLightItalic'), url('/fonts/GothamCond-XLightItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-Light';
+  src: local('GothamCond-Light'), url('/fonts/GothamCond-Light.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-LightIt';
+  src: local('GothamCond-LightItalic'), url('/fonts/GothamCond-LightItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-Book';
+  src: local('GothamCond-Book'), url('/fonts/GothamCond-Book.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-BookIt';
+  src: local('GothamCond-BookItalic'), url('/fonts/GothamCond-BookItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-Medium';
+  src: local('GothamCond-Medium'), url('/fonts/GothamCond-Medium.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-MediumIt';
+  src: local('GothamCond-MediumItalic'), url('/fonts/GothamCond-MediumItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-Bold';
+  src: local('GothamCond-Bold'), url('/fonts/GothamCond-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-BoldIt';
+  src: local('GothamCond-BoldItalic'), url('/fonts/GothamCond-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-Black';
+  src: local('GothamCond-Black'), url('/fonts/GothamCond-Black.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-BlackIt';
+  src: local('GothamCond-BlackItalic'), url('/fonts/GothamCond-BlackItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-XBlack';
+  src: local('GothamCond-XBlack'), url('/fonts/GothamCond-XBlack.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-XBlackIt';
+  src: local('GothamCond-XBlackItalic'), url('/fonts/GothamCond-XBlackItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-Ultra';
+  src: local('GothamCond-Ultra'), url('/fonts/GothamCond-Ultra.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamCondensed-UltraIt';
+  src: local('GothamCond-UltraItalic'), url('/fonts/GothamCond-UltraItalic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── CSS custom properties ──────────────────────────────────────────────── */
+:root {
+  /* Myriad Pro */
+  --font-myriad-light:    'MyriadPro-Light', Arial, sans-serif;
+  --font-myriad:          'MyriadPro-Regular', Arial, sans-serif;
+  --font-myriad-semibold: 'MyriadPro-Semibold', Arial, sans-serif;
+  --font-myriad-bold:     'MyriadPro-Bold', Arial, sans-serif;
+
+  /* Gotham Condensed */
+  --font-gotham-thin:    'GothamCondensed-Thin', 'Arial Narrow', sans-serif;
+  --font-gotham-xlight:  'GothamCondensed-XLight', 'Arial Narrow', sans-serif;
+  --font-gotham-light:   'GothamCondensed-Light', 'Arial Narrow', sans-serif;
+  --font-gotham-book:    'GothamCondensed-Book', 'Arial Narrow', sans-serif;
+  --font-gotham-medium:  'GothamCondensed-Medium', 'Arial Narrow', sans-serif;
+  --font-gotham-bold:    'GothamCondensed-Bold', 'Arial Narrow', sans-serif;
+  --font-gotham-black:   'GothamCondensed-Black', 'Arial Narrow', sans-serif;
+  --font-gotham-xblack:  'GothamCondensed-XBlack', 'Arial Narrow', sans-serif;
+  --font-gotham-ultra:   'GothamCondensed-Ultra', 'Arial Narrow', sans-serif;
+}
+
 #preview-render {
-  font-family: 'MyriadPro-Light', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-myriad-light);
   font-size: 32px;
   color: #373c44;
 }

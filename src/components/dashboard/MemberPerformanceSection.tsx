@@ -1,7 +1,8 @@
-import { ChevronDown, ChevronUp, Lightbulb, Search } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 import { getMetricValueClass, MEMBER_METRICS, TABLE_METRICS } from '../../config/memberMetrics';
 import type { Member } from '../../types/member';
 import MemberGrowthProgress from './MemberGrowthProgress';
+import PointsHelpButton from './PointsHelpButton';
 
 type MemberPerformanceSectionProps = {
   members: Member[];
@@ -12,10 +13,12 @@ type MemberPerformanceSectionProps = {
   onSort: (field: keyof Member) => void;
   onMemberSelect: (member: Member) => void;
   onOpenPointsModal: () => void;
+  variant?: 'default' | 'performance-dashboard';
+  totalMemberCount?: number;
 };
 
 const cellClass =
-  "font-['MyriadPro-Bold','MyriadPro-Light',Arial,sans-serif] text-[0.95rem] font-semibold text-slate-800";
+  "font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-slate-800";
 
 function SortIcon({
   field,
@@ -68,6 +71,106 @@ function MeetingRoleTags({ roles, variant }: { roles: string[]; variant: 'mobile
   );
 }
 
+function PerformanceDashboardTable({
+  members,
+  searchTerm,
+  onSearchChange,
+  sortField,
+  sortDirection,
+  onSort,
+  onOpenPointsModal,
+  totalMemberCount,
+}: Pick<
+  MemberPerformanceSectionProps,
+  | 'members'
+  | 'searchTerm'
+  | 'onSearchChange'
+  | 'sortField'
+  | 'sortDirection'
+  | 'onSort'
+  | 'onOpenPointsModal'
+  | 'totalMemberCount'
+>) {
+  const columns = TABLE_METRICS.filter((metric) => metric.field !== 'ajScore');
+
+  return (
+    <section className="performance-members-card">
+      <div className="performance-members-heading">
+        <div>
+          <h2>Member Performance</h2>
+          <p>Individual progress across education, roles, visits, contests, and total points.</p>
+        </div>
+        <div className="performance-members-search-area">
+          <span>{totalMemberCount ?? members.length} Members</span>
+          <div className="performance-members-search-row">
+            <PointsHelpButton onClick={onOpenPointsModal} variant="performance-dashboard" />
+            <label>
+              <Search size={21} strokeWidth={2} />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => onSearchChange(event.target.value)}
+                placeholder="Search Members"
+                aria-label="Search members"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div className="performance-members-table-scroll">
+        <table className="performance-members-table">
+          <thead>
+            <tr>
+              <th onClick={() => onSort('name')}>
+                Name <SortIcon field="name" sortField={sortField} sortDirection={sortDirection} />
+              </th>
+              {columns.map((column) => (
+                <th key={column.field} onClick={() => onSort(column.field)}>
+                  {column.shortLabel}{' '}
+                  <SortIcon field={column.field} sortField={sortField} sortDirection={sortDirection} />
+                </th>
+              ))}
+              <th>Growth</th>
+              <th onClick={() => onSort('ajScore')}>
+                Total <SortIcon field="ajScore" sortField={sortField} sortDirection={sortDirection} />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.map((member, index) => {
+              const growth = Math.min(100, Math.round((member.ajScore / 186) * 100));
+
+              return (
+                <tr key={`${member.name}-${index}`}>
+                  <td>
+                    <span className="performance-member-rank">{index + 1}</span>
+                    <strong>{member.name}</strong>
+                  </td>
+                  {columns.map((column) => (
+                    <td key={column.field}>{member[column.field] as number}</td>
+                  ))}
+                  <td>
+                    <div className="performance-member-growth">
+                      <span>{growth}% Growth</span>
+                      <i><b style={{ width: `${growth}%` }} /></i>
+                    </div>
+                  </td>
+                  <td>{member.ajScore}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {members.length === 0 && (
+        <div className="performance-members-empty">No members found matching “{searchTerm}”</div>
+      )}
+    </section>
+  );
+}
+
 export default function MemberPerformanceSection({
   members,
   searchTerm,
@@ -77,7 +180,24 @@ export default function MemberPerformanceSection({
   onSort,
   onMemberSelect,
   onOpenPointsModal,
+  variant = 'default',
+  totalMemberCount,
 }: MemberPerformanceSectionProps) {
+  if (variant === 'performance-dashboard') {
+    return (
+      <PerformanceDashboardTable
+        members={members}
+        searchTerm={searchTerm}
+        onSearchChange={onSearchChange}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        onOpenPointsModal={onOpenPointsModal}
+        totalMemberCount={totalMemberCount}
+      />
+    );
+  }
+
   return (
     <section>
       <div className="text-center">
@@ -91,20 +211,7 @@ export default function MemberPerformanceSection({
         </p>
 
         <div className="mx-auto mt-7 flex w-full max-w-5xl flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-          <button
-            type="button"
-            onClick={onOpenPointsModal}
-            className="group flex h-14 w-14 shrink-0 items-center justify-start overflow-hidden rounded-full border border-toastmasters-gold/40 bg-white/95 px-4 text-toastmasters-navy shadow-[0_14px_35px_rgba(15,29,56,0.1)] ring-1 ring-white/70 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:w-[15.5rem] hover:border-toastmasters-gold hover:bg-[#fff8e1] hover:shadow-[0_18px_42px_rgba(197,160,71,0.2)] focus:w-[15.5rem] focus:border-toastmasters-gold focus:bg-[#fff8e1] focus:outline-none focus:ring-4 focus:ring-toastmasters-gold/20"
-          >
-            <Lightbulb
-              size={22}
-              strokeWidth={2.2}
-              className="shrink-0 text-toastmasters-gold-dark transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-focus:scale-110"
-            />
-            <span className="ml-0 max-w-0 whitespace-nowrap text-sm font-bold text-toastmasters-navy opacity-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:ml-3 group-hover:max-w-[12rem] group-hover:opacity-100 group-focus:ml-3 group-focus:max-w-[12rem] group-focus:opacity-100">
-              How are points calculated?
-            </span>
-          </button>
+          <PointsHelpButton onClick={onOpenPointsModal} />
 
           <div className="relative w-full sm:max-w-[31rem]">
             <Search
@@ -259,7 +366,7 @@ export default function MemberPerformanceSection({
                     <MemberGrowthProgress totalPoints={member.ajScore} compact />
                   </td>
                   <td className="sticky right-0 z-20 bg-white px-3 py-3 text-center shadow-[-8px_0_18px_rgba(15,29,56,0.05)] transition-colors group-hover:bg-[#f8fafc]">
-                    <span className="font-['MyriadPro-Bold','MyriadPro-Light',Arial,sans-serif] text-base font-extrabold text-[#781327]">
+                    <span className="font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-[#781327]">
                       {member.ajScore}
                     </span>
                   </td>

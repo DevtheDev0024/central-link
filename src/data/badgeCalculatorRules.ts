@@ -154,7 +154,7 @@ export const BADGE_CALCULATOR_RULES: BadgeCalculatorRule[] = [
     id: 'role-champion',
     name: 'Role Champion',
     requiredPoints: '100 meeting role points',
-    pointsPerAction: 'TMOD 10, TTM 8, GE 6, Game Master 5, TAG/RRM 4',
+    pointsPerAction: 'TMOD = 10, TTM = 8, GE = 6, Game Master = 5, TAG/RRM = 4',
     estimatedActions: '10 TMOD roles, or a balanced mix of meeting roles',
     examplePathway: 'Take 10 TMOD roles, or combine TMOD, TTM, GE, Game Master, and TAG/RRM roles.',
     message: 'Taking roles consistently keeps meetings alive and helps you grow faster.',
