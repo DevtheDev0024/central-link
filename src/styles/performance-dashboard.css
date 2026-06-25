@@ -498,8 +498,8 @@
   display: grid;
   grid-template-columns: repeat(4, auto);
   justify-content: center;
-  gap: clamp(36px, 5vw, 84px);
-  margin: 22px 0;
+  gap: clamp(64px, 11vw, 168px);
+  margin: 30px 0;
 }
 
 .performance-metric {
@@ -507,27 +507,28 @@
   min-width: 0;
   flex-direction: column;
   align-items: center;
+  gap: 6px;
   text-align: center;
 }
 
 .performance-metric > span {
   color: var(--pd-maroon);
   font-family: 'MyriadPro-Bold', Arial, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
 }
 
 .performance-metric > strong {
-  margin: 2px 0;
+  margin: 0;
   color: var(--pd-blue);
   font-family: 'GothamCondensed-Bold', sans-serif;
-  font-size: 3rem;
+  font-size: 4rem;
   line-height: 1;
 }
 
 .performance-metric small {
   color: #5f6b73;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
-  font-size: 0.77rem;
+  font-size: 0.92rem;
 }
 
 .performance-grid {
