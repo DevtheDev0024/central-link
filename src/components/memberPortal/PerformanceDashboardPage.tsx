@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, ChevronRight } from 'lucide-react';
+import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
 import type { BadgeDefinition } from '../../types/badges';
+import type { PointsModalTab } from '../../types/badges';
 import type { Member } from '../../types/member';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
 import MemberPerformanceSection from '../dashboard/MemberPerformanceSection';
+import PointsModal from '../dashboard/PointsModal';
 
 const metrics = [
   { label: 'Speeches Delivered', value: '8', note: '2 this term' },
@@ -106,6 +109,9 @@ export default function PerformanceDashboardPage() {
   const [memberSearchTerm, setMemberSearchTerm] = useState('');
   const [memberSortField, setMemberSortField] = useState<keyof Member>('ajScore');
   const [memberSortDirection, setMemberSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [showPointsModal, setShowPointsModal] = useState(false);
+  const [pointsModalTab, setPointsModalTab] = useState<PointsModalTab>('scoring');
+  const [selectedCalculatorBadgeId, setSelectedCalculatorBadgeId] = useState(BADGE_CALCULATOR_RULES[0].id);
   const badgeCloseTimeoutRef = useRef<number | null>(null);
 
   const visibleMembers = performanceMembers
@@ -130,6 +136,11 @@ export default function PerformanceDashboardPage() {
 
     setMemberSortField(field);
     setMemberSortDirection('desc');
+  };
+
+  const openPointsModal = () => {
+    setPointsModalTab('scoring');
+    setShowPointsModal(true);
   };
 
   const openSelectedBadge = (badge: BadgeDefinition) => {
@@ -320,13 +331,22 @@ export default function PerformanceDashboardPage() {
           sortDirection={memberSortDirection}
           onSort={handleMemberSort}
           onMemberSelect={() => undefined}
-          onOpenPointsModal={() => undefined}
+          onOpenPointsModal={openPointsModal}
           variant="performance-dashboard"
           totalMemberCount={32}
         />
       </div>
 
       <BadgeDetailOverlay badge={selectedBadge} isClosing={isBadgeDetailClosing} onClose={closeSelectedBadge} />
+      <PointsModal
+        isOpen={showPointsModal}
+        onClose={() => setShowPointsModal(false)}
+        pointsModalTab={pointsModalTab}
+        onTabChange={setPointsModalTab}
+        selectedCalculatorBadgeId={selectedCalculatorBadgeId}
+        onCalculatorBadgeChange={setSelectedCalculatorBadgeId}
+        variant="performance-dashboard"
+      />
     </>
   );
 }

@@ -11,6 +11,7 @@ type PointsModalProps = {
   onTabChange: (tab: PointsModalTab) => void;
   selectedCalculatorBadgeId: string;
   onCalculatorBadgeChange: (id: string) => void;
+  variant?: 'default' | 'performance-dashboard';
 };
 
 export default function PointsModal({
@@ -20,6 +21,7 @@ export default function PointsModal({
   onTabChange,
   selectedCalculatorBadgeId,
   onCalculatorBadgeChange,
+  variant = 'default',
 }: PointsModalProps) {
   if (!isOpen) return null;
 
@@ -29,14 +31,18 @@ export default function PointsModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 px-0 py-0 backdrop-blur-sm animate-fade-in sm:items-center sm:px-4 sm:py-6"
+      className={`fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 px-0 py-0 backdrop-blur-sm animate-fade-in sm:items-center sm:px-4 sm:py-6 ${
+        variant === 'performance-dashboard' ? 'performance-points-overlay' : ''
+      }`}
       onClick={onClose}
     >
       <div
-        className="flex max-h-[94vh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-slate-200/80 bg-[#f7f9fb] shadow-[0_30px_90px_rgba(15,29,56,0.35)] animate-slide-up sm:max-w-5xl sm:rounded-[2rem]"
+        className={`flex max-h-[94vh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-slate-200/80 bg-[#f7f9fb] shadow-[0_30px_90px_rgba(15,29,56,0.35)] animate-slide-up sm:max-w-5xl sm:rounded-[2rem] ${
+          variant === 'performance-dashboard' ? 'performance-points-modal' : ''
+        }`}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="relative border-b border-slate-200/70 bg-[linear-gradient(135deg,#112242_0%,#17335c_55%,#224273_100%)] px-5 py-6 text-white sm:px-7">
+        <div className="points-modal-header relative border-b border-slate-200/70 bg-[linear-gradient(135deg,#112242_0%,#17335c_55%,#224273_100%)] px-5 py-6 text-white sm:px-7">
           <button
             type="button"
             onClick={onClose}
@@ -57,7 +63,7 @@ export default function PointsModal({
           </div>
         </div>
 
-        <div className="border-b border-slate-200/70 bg-[#f7f9fb] p-4 sm:px-7">
+        <div className="points-modal-tabs border-b border-slate-200/70 bg-[#f7f9fb] p-4 sm:px-7">
           <div className="grid grid-cols-2 gap-2 rounded-2xl bg-white p-1 ring-1 ring-slate-200/80">
             {[
               { id: 'scoring' as PointsModalTab, label: 'Scoring Guide' },
@@ -70,7 +76,9 @@ export default function PointsModal({
                   key={tab.id}
                   type="button"
                   onClick={() => onTabChange(tab.id)}
-                  className={`rounded-xl px-3 py-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-toastmasters-gold/20 ${
+                  className={`points-modal-tab rounded-xl px-3 py-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-toastmasters-gold/20 ${
+                    isActive ? 'is-active ' : ''
+                  }${
                     isActive ? 'bg-toastmasters-navy text-white shadow-sm' : 'text-toastmasters-navy hover:bg-slate-50'
                   }`}
                 >
@@ -81,7 +89,7 @@ export default function PointsModal({
           </div>
         </div>
 
-        <div className="overflow-y-auto p-4 sm:p-7">
+        <div className="points-modal-content overflow-y-auto p-4 sm:p-7">
           {pointsModalTab === 'scoring' ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {SCORING_RULES.map((rule) => {
@@ -192,7 +200,7 @@ export default function PointsModal({
             </div>
           )}
 
-          <p className="mt-6 rounded-[1.25rem] bg-toastmasters-navy px-4 py-4 text-center text-sm font-semibold leading-6 text-white">
+          <p className="points-modal-footer mt-6 rounded-[1.25rem] bg-toastmasters-navy px-4 py-4 text-center text-sm font-semibold leading-6 text-white">
             Every point reflects your effort, participation, and growth as a Toastmaster.
           </p>
         </div>

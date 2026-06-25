@@ -1,7 +1,8 @@
-import { ChevronDown, ChevronUp, Lightbulb, Search } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 import { getMetricValueClass, MEMBER_METRICS, TABLE_METRICS } from '../../config/memberMetrics';
 import type { Member } from '../../types/member';
 import MemberGrowthProgress from './MemberGrowthProgress';
+import PointsHelpButton from './PointsHelpButton';
 
 type MemberPerformanceSectionProps = {
   members: Member[];
@@ -77,10 +78,18 @@ function PerformanceDashboardTable({
   sortField,
   sortDirection,
   onSort,
+  onOpenPointsModal,
   totalMemberCount,
 }: Pick<
   MemberPerformanceSectionProps,
-  'members' | 'searchTerm' | 'onSearchChange' | 'sortField' | 'sortDirection' | 'onSort' | 'totalMemberCount'
+  | 'members'
+  | 'searchTerm'
+  | 'onSearchChange'
+  | 'sortField'
+  | 'sortDirection'
+  | 'onSort'
+  | 'onOpenPointsModal'
+  | 'totalMemberCount'
 >) {
   const columns = TABLE_METRICS.filter((metric) => metric.field !== 'ajScore');
 
@@ -93,16 +102,19 @@ function PerformanceDashboardTable({
         </div>
         <div className="performance-members-search-area">
           <span>{totalMemberCount ?? members.length} Members</span>
-          <label>
-            <Search size={21} strokeWidth={2} />
-            <input
-              type="search"
-              value={searchTerm}
-              onChange={(event) => onSearchChange(event.target.value)}
-              placeholder="Search Members"
-              aria-label="Search members"
-            />
-          </label>
+          <div className="performance-members-search-row">
+            <PointsHelpButton onClick={onOpenPointsModal} variant="performance-dashboard" />
+            <label>
+              <Search size={21} strokeWidth={2} />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => onSearchChange(event.target.value)}
+                placeholder="Search Members"
+                aria-label="Search members"
+              />
+            </label>
+          </div>
         </div>
       </div>
 
@@ -180,6 +192,7 @@ export default function MemberPerformanceSection({
         sortField={sortField}
         sortDirection={sortDirection}
         onSort={onSort}
+        onOpenPointsModal={onOpenPointsModal}
         totalMemberCount={totalMemberCount}
       />
     );
@@ -198,20 +211,7 @@ export default function MemberPerformanceSection({
         </p>
 
         <div className="mx-auto mt-7 flex w-full max-w-5xl flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-          <button
-            type="button"
-            onClick={onOpenPointsModal}
-            className="group flex h-14 w-14 shrink-0 items-center justify-start overflow-hidden rounded-full border border-toastmasters-gold/40 bg-white/95 px-4 text-toastmasters-navy shadow-[0_14px_35px_rgba(15,29,56,0.1)] ring-1 ring-white/70 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:w-[15.5rem] hover:border-toastmasters-gold hover:bg-[#fff8e1] hover:shadow-[0_18px_42px_rgba(197,160,71,0.2)] focus:w-[15.5rem] focus:border-toastmasters-gold focus:bg-[#fff8e1] focus:outline-none focus:ring-4 focus:ring-toastmasters-gold/20"
-          >
-            <Lightbulb
-              size={22}
-              strokeWidth={2.2}
-              className="shrink-0 text-toastmasters-gold-dark transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-focus:scale-110"
-            />
-            <span className="ml-0 max-w-0 whitespace-nowrap text-sm font-bold text-toastmasters-navy opacity-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:ml-3 group-hover:max-w-[12rem] group-hover:opacity-100 group-focus:ml-3 group-focus:max-w-[12rem] group-focus:opacity-100">
-              How are points calculated?
-            </span>
-          </button>
+          <PointsHelpButton onClick={onOpenPointsModal} />
 
           <div className="relative w-full sm:max-w-[31rem]">
             <Search
