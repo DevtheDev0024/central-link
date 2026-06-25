@@ -1,9 +1,11 @@
+import { KeyRound } from 'lucide-react';
 import SignOutButton from './SignOutButton';
 
 type AccountFooterPanelProps = {
   email?: string | null;
   displayName?: string | null;
   onSignOut: () => void;
+  onChangePassword?: () => void;
   variant?: 'on-dark' | 'on-light';
   className?: string;
 };
@@ -21,6 +23,7 @@ export default function AccountFooterPanel({
   email,
   displayName,
   onSignOut,
+  onChangePassword,
   variant = 'on-light',
   className,
 }: AccountFooterPanelProps) {
@@ -45,6 +48,16 @@ export default function AccountFooterPanel({
           ) : null}
         </div>
       </div>
+      {onChangePassword ? (
+        <button
+          type="button"
+          className={`change-password-button${variant === 'on-dark' ? ' is-on-dark' : ''}`}
+          onClick={onChangePassword}
+        >
+          <KeyRound size={14} aria-hidden="true" />
+          Change password
+        </button>
+      ) : null}
       <SignOutButton variant={variant} onClick={onSignOut} />
     </div>
   );
