@@ -75,7 +75,7 @@
   align-items: center;
   gap: 12px;
   padding: 11px 24px;
-  background: #006094;
+  background: #004165;
 }
 
 .performance-member strong {
@@ -149,7 +149,7 @@
   border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 6px 6px 20px 20px;
   padding: 14px 15px;
-  background: #006094;
+  background: #004165;
   color: white;
   text-decoration: none;
 }
@@ -387,9 +387,7 @@
   overflow: hidden;
   border-radius: 30px;
   padding: 26px clamp(30px, 4vw, 54px);
-  background:
-    radial-gradient(circle at 72% -30%, rgba(255, 255, 255, 0.18), transparent 35%),
-    linear-gradient(115deg, #063a59 0%, #075b88 58%, #0872a4 100%);
+  background: #004165;
   box-shadow: 0 24px 50px rgba(7, 75, 112, 0.18);
   color: white;
 }
@@ -699,21 +697,8 @@
   overflow: hidden;
   padding: 31px;
   border: 0;
-  background:
-    radial-gradient(circle at 95% 5%, rgba(255, 255, 255, 0.15), transparent 30%),
-    linear-gradient(145deg, #07527c, #066c9b);
+  background: #004165;
   color: white;
-}
-
-.performance-fees-card::after {
-  position: absolute;
-  right: -70px;
-  bottom: -90px;
-  width: 220px;
-  height: 220px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 50%;
-  content: '';
 }
 
 .performance-fees-card .performance-eyebrow {
