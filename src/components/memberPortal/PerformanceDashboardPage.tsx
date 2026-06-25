@@ -1,12 +1,4 @@
-import {
-  Award,
-  BookOpen,
-  CalendarDays,
-  Check,
-  Mic2,
-  Sparkles,
-  Trophy,
-} from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 
 const metrics = [
   { label: 'Speeches Delivered', value: '8', note: '2 this term' },
@@ -16,16 +8,20 @@ const metrics = [
 ];
 
 const activities = [
-  { title: 'Completed General Evaluator role', date: 'June 20', points: '+18 pts', icon: Mic2 },
-  { title: 'Delivered “The Power of Pause”', date: 'June 13', points: '+35 pts', icon: Sparkles },
-  { title: 'Attended weekly club meeting', date: 'June 6', points: '+10 pts', icon: CalendarDays },
+  { title: 'Completed General Evaluator Role', detail: 'June 20 • ESU TMC', points: '+18 pts' },
+  { title: 'Delivered “Guilty, Your Honor”', detail: 'June 13 • Central Link TMC', points: '+35 pts' },
+  { title: 'Visit Another Club', detail: 'June 6 • Dowels TMC', points: '+10 pts' },
 ];
 
 // Placeholder set — earned badges will be fetched/routed per member later.
 const earnedBadges = [
-  { name: 'Meeting Star', image: '/badges/Meeting-Star.png' },
+  { name: 'Pathways Achiever', image: '/badges/Pathways-Achiever.png' },
   { name: 'Contest Supporter', image: '/badges/Contest-Supporter.png' },
+  { name: 'Leadership Contributor', image: '/badges/Leadership-Contributor.png' },
+  { name: 'Learning Enthusiast', image: '/badges/Learning-Enthusiast.png' },
   { name: 'Evaluation Champion', image: '/badges/Evaluation-Champion.png' },
+  { name: 'Contest Star', image: '/badges/Contest-Star.png' },
+  { name: 'Meeting Star', image: '/badges/Meeting-Star.png' },
 ];
 
 const pathwayLevels = [
@@ -43,7 +39,25 @@ const pathwayProjects = [
   { name: 'Managing a Difficult Audience', done: false },
 ];
 
+function groupBadges<T>(badges: T[]) {
+  const rowCount = Math.ceil(badges.length / 4);
+  const minimumRowSize = Math.floor(badges.length / rowCount);
+  const largerRowCount = badges.length % rowCount;
+  const rows: T[][] = [];
+  let offset = 0;
+
+  for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+    const rowSize = minimumRowSize + (rowIndex < largerRowCount ? 1 : 0);
+    rows.push(badges.slice(offset, offset + rowSize));
+    offset += rowSize;
+  }
+
+  return rows;
+}
+
 export default function PerformanceDashboardPage() {
+  const badgeRows = groupBadges(earnedBadges);
+
   return (
     <>
       <section className="performance-hero">
@@ -52,7 +66,7 @@ export default function PerformanceDashboardPage() {
           <div className="performance-hero-headline">
             <h2>Dulain Gunawardhana</h2>
             <div className="performance-hero-badges" aria-label="Earned badges">
-              {earnedBadges.map((badge) => (
+              {earnedBadges.slice(0, 3).map((badge) => (
                 <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
               ))}
             </div>
@@ -133,37 +147,43 @@ export default function PerformanceDashboardPage() {
           <button type="button">Open Payment Portal</button>
         </article>
 
-        <article className="performance-card performance-activity-card">
-          <div className="performance-section-heading">
+        <article className="performance-card performance-badges-card">
+          <div className="performance-badges-heading">
             <div>
-              <span className="performance-eyebrow">Latest updates</span>
-              <h3>Recent Activity</h3>
+              <span>Dulain Gunawardhana</span>
+              <h3>Earned Badges</h3>
             </div>
-            <button type="button">View all</button>
+            <div className="performance-badges-count">
+              <strong>7</strong>
+              <span>of 12</span>
+            </div>
           </div>
-          <div className="performance-activity-list">
-            {activities.map(({ title, date, points, icon: Icon }) => (
-              <div key={title} className="performance-activity-item">
-                <span className="performance-activity-icon"><Icon size={18} /></span>
-                <div><strong>{title}</strong><span>{date}</span></div>
-                <b>{points}</b>
+          <div className="performance-earned-badges" aria-label="Earned badges">
+            {badgeRows.map((row, rowIndex) => (
+              <div key={rowIndex} className="performance-earned-badges-row">
+                {row.map((badge) => (
+                  <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
+                ))}
               </div>
             ))}
           </div>
+          <div className="performance-badges-footer">
+            <button type="button">View All <ChevronRight size={20} /></button>
+          </div>
         </article>
 
-        <article className="performance-card performance-achievements-card">
-          <div className="performance-section-heading">
-            <div>
-              <span className="performance-eyebrow">Milestones</span>
-              <h3>Achievements</h3>
-            </div>
-            <Award size={22} />
+        <article className="performance-card performance-activity-card">
+          <div className="performance-activity-heading">
+            <span className="performance-eyebrow">Latest Updates</span>
+            <h3>Recent Activity</h3>
           </div>
-          <div className="performance-achievement-row">
-            <div className="is-gold"><Trophy size={25} /><span>Top 3<br />Member</span></div>
-            <div className="is-blue"><BookOpen size={25} /><span>Level 2<br />Complete</span></div>
-            <div className="is-maroon"><Mic2 size={25} /><span>10 Roles<br />Taken</span></div>
+          <div className="performance-activity-list">
+            {activities.map(({ title, detail, points }) => (
+              <div key={title} className="performance-activity-item">
+                <div><strong>{title}</strong><span>{detail}</span></div>
+                <b>{points}</b>
+              </div>
+            ))}
           </div>
         </article>
       </section>

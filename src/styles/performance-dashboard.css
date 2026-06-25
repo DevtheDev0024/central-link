@@ -541,8 +541,19 @@
 
 .performance-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.95fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
   gap: 24px;
+}
+
+.performance-progress-card,
+.performance-activity-card {
+  grid-column: span 3;
+}
+
+.performance-fees-card,
+.performance-badges-card {
+  grid-column: span 2;
 }
 
 .performance-card {
@@ -789,36 +800,139 @@
   font-weight: 600;
 }
 
-.performance-activity-card,
-.performance-achievements-card {
-  padding: 28px 30px;
+.performance-badges-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 34px 20px;
+  border: 0;
+  background: #004165;
+  color: white;
 }
 
-.performance-section-heading h3 {
-  font-size: 2rem;
+.performance-badges-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.34);
+  padding-bottom: 13px;
+}
+
+.performance-badges-heading > div:first-child > span {
+  display: block;
+  color: var(--pd-gold);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-badges-card h3 {
+  margin-top: 5px;
+  color: white;
+  font-size: clamp(2.25rem, 3.4vw, 3rem);
+  white-space: nowrap;
+}
+
+.performance-badges-count {
+  flex: 0 0 auto;
+  padding-bottom: 2px;
+  text-align: center;
+}
+
+.performance-badges-count strong,
+.performance-badges-count span {
+  display: block;
+}
+
+.performance-badges-count strong {
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: 3.25rem;
+  line-height: 0.75;
+}
+
+.performance-badges-count span {
+  margin-top: 7px;
+  color: rgba(255, 255, 255, 0.68);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-earned-badges {
+  display: flex;
+  width: 100%;
+  max-width: 380px;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  margin-inline: auto;
+  padding: 10px 0;
+}
+
+.performance-earned-badges-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.performance-earned-badges-row img {
+  width: clamp(58px, 5vw, 72px);
+  height: clamp(58px, 5vw, 72px);
+  object-fit: contain;
+}
+
+.performance-badges-footer {
+  display: flex;
+  border-top: 1px solid rgba(255, 255, 255, 0.34);
+  width: 100%;
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+.performance-badges-footer button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-activity-card {
+  padding: 26px 38px;
+}
+
+.performance-activity-heading {
+  border-bottom: 1px solid #dfe3e5;
+  padding-bottom: 10px;
+}
+
+.performance-activity-heading .performance-eyebrow {
+  color: var(--pd-maroon);
+}
+
+.performance-activity-heading h3 {
+  margin-top: 5px;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
 }
 
 .performance-activity-list {
-  margin-top: 19px;
+  margin-top: 0;
 }
 
 .performance-activity-item {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid #eceeef;
-}
-
-.performance-activity-icon {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border-radius: 12px;
-  background: #edf4f7;
-  color: var(--pd-blue);
+  gap: 24px;
+  min-height: 68px;
+  border-bottom: 1px solid #dfe3e5;
 }
 
 .performance-activity-item strong,
@@ -827,63 +941,26 @@
 }
 
 .performance-activity-item strong {
-  overflow: hidden;
+  color: #004165;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1rem;
   font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .performance-activity-item div span {
-  margin-top: 2px;
-  color: #92999e;
-  font-size: 0.72rem;
-}
-
-.performance-activity-item b {
-  color: #2ca45a;
-  font-size: 0.75rem;
-}
-
-.performance-achievement-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 11px;
-  margin-top: 21px;
-}
-
-.performance-achievement-row > div {
-  display: flex;
-  min-height: 102px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  border-radius: 15px;
-  text-align: center;
-}
-
-.performance-achievement-row span {
+  margin-top: 0;
+  color: #aeb5b5;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1rem;
   font-weight: 600;
-  line-height: 1.25;
 }
 
-.performance-achievement-row .is-gold {
-  background: #fff7d8;
-  color: #967818;
-}
-
-.performance-achievement-row .is-blue {
-  background: #eaf3f7;
-  color: var(--pd-blue);
-}
-
-.performance-achievement-row .is-maroon {
-  background: #f7e9ed;
+.performance-activity-item b {
   color: var(--pd-maroon);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .performance-backdrop {
@@ -970,6 +1047,14 @@
 
   .performance-grid {
     grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .performance-progress-card,
+  .performance-fees-card,
+  .performance-badges-card,
+  .performance-activity-card {
+    grid-column: auto;
   }
 }
 
@@ -1050,14 +1135,22 @@
     padding: 0;
   }
 
-  .performance-achievement-row {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
   .performance-activity-card,
-  .performance-achievements-card,
+  .performance-badges-card,
   .performance-fees-card,
   .performance-progress-card {
     padding: 23px 20px;
+  }
+
+  .performance-badges-card h3 {
+    font-size: 2.35rem;
+  }
+
+  .performance-earned-badges {
+    padding-inline: 0;
+  }
+
+  .performance-activity-item {
+    gap: 14px;
   }
 }
