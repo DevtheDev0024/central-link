@@ -16,7 +16,7 @@ import {
   Sparkles,
   Target,
   Trophy,
-  UserRound,
+  UserCircle,
   UsersRound,
   X,
 } from 'lucide-react';
@@ -55,7 +55,7 @@ export default function PerformanceDashboard() {
     <div className="performance-shell">
       <aside className={`performance-sidebar ${isMenuOpen ? 'is-open' : ''}`}>
         <div className="performance-brand">
-          <img src="/toastmasters-logo.png" alt="Toastmasters International" />
+          <img src="/toastmasters-logo-white.png" alt="Toastmasters International" />
           <div>
             <strong>Central Link</strong>
             <span>Division I · District 82</span>
@@ -121,11 +121,11 @@ export default function PerformanceDashboard() {
               <input type="search" placeholder="Search dashboard" aria-label="Search dashboard" />
             </label>
             <button type="button" className="performance-icon-button" aria-label="Notifications">
-              <Bell size={21} />
+              <Bell size={22} strokeWidth={2.4} />
               <span />
             </button>
             <button type="button" className="performance-profile-button" aria-label="Open profile">
-              <UserRound size={22} />
+              <UserCircle className="performance-profile-avatar" size={26} strokeWidth={1.5} aria-hidden="true" />
             </button>
           </div>
         </header>

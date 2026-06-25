@@ -32,8 +32,8 @@
 }
 
 .performance-brand img {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   flex: 0 0 auto;
   object-fit: contain;
 }
@@ -44,12 +44,22 @@
 
 .performance-brand strong {
   display: block;
-  font-family: 'GothamCondensed-Bold', sans-serif;
-  font-size: 1.65rem;
+  font-family: 'GothamCondensed-Medium', sans-serif;
+  font-weight: 500;
+  font-size: 2.35rem;
   line-height: 1;
 }
 
-.performance-brand span,
+.performance-brand span {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .performance-member span {
   display: block;
   margin-top: 4px;
@@ -183,33 +193,33 @@
   top: 0;
   z-index: 30;
   display: flex;
-  min-height: 92px;
+  min-height: 88px;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   border-bottom: 1px solid #e4e6e8;
-  padding: 15px clamp(24px, 4vw, 58px);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 10px 28px rgba(16, 35, 56, 0.06);
-  backdrop-filter: blur(14px);
+  padding: 14px clamp(24px, 4vw, 44px);
+  background: #fefefe;
+  box-shadow: 0 10px 28px rgba(16, 35, 56, 0.04);
 }
 
 .performance-title span,
 .performance-eyebrow {
   display: block;
-  color: var(--pd-maroon);
-  font-family: 'MyriadPro-Bold', Arial, sans-serif;
-  font-size: 0.69rem;
-  letter-spacing: 0.14em;
+  color: #781327;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.19em;
   text-transform: uppercase;
 }
 
 .performance-title h1 {
-  margin: 3px 0 0;
-  color: var(--pd-navy);
+  margin: 4px 0 0;
+  color: #004165;
   font-family: 'GothamCondensed-Bold', sans-serif;
-  font-size: clamp(1.85rem, 3vw, 2.55rem);
-  line-height: 0.95;
+  font-size: clamp(2.2rem, 3.2vw, 2.55rem);
+  line-height: 1;
   text-transform: uppercase;
 }
 
@@ -221,14 +231,21 @@
 
 .performance-search {
   display: flex;
-  width: min(290px, 24vw);
+  width: min(260px, 22vw);
+  height: 42px;
   align-items: center;
   gap: 9px;
-  border: 1px solid #d7dade;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 999px;
-  padding: 9px 15px;
-  background: #f4f4f3;
-  color: #84909b;
+  padding: 0 18px;
+  background: rgba(245, 246, 248, 0.9);
+  color: #8b9298;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.performance-search:focus-within {
+  border-color: rgba(0, 65, 101, 0.45);
+  background: white;
 }
 
 .performance-search input {
@@ -238,7 +255,15 @@
   outline: 0;
   background: transparent;
   color: #102338;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.performance-search input::placeholder {
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
 }
 
 .performance-icon-button,
@@ -247,8 +272,8 @@
 .performance-menu-close {
   position: relative;
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   place-items: center;
   border: 0;
   border-radius: 50%;
@@ -256,24 +281,49 @@
 }
 
 .performance-icon-button {
-  background: #d9e7ee;
-  color: var(--pd-blue);
+  background: transparent;
+  color: #1d2b3a;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.performance-icon-button:hover {
+  background: rgba(0, 65, 101, 0.08);
+  color: #004165;
+}
+
+.performance-icon-button > svg {
+  stroke-width: 2.4;
 }
 
 .performance-icon-button span {
   position: absolute;
-  top: 4px;
-  right: 5px;
+  top: 7px;
+  right: 8px;
   width: 8px;
   height: 8px;
-  border: 2px solid white;
+  border: 2px solid #fefefe;
   border-radius: 50%;
   background: #e84335;
 }
 
 .performance-profile-button {
-  background: #e5e6e6;
-  color: #6d7479;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: #d9e1e7;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.performance-profile-button:hover {
+  box-shadow: 0 0 0 2px rgba(0, 65, 101, 0.25);
+}
+
+.performance-profile-avatar {
+  display: block;
+  color: #5a6e7a;
 }
 
 .performance-menu-button,
