@@ -425,6 +425,14 @@
   text-transform: uppercase;
 }
 
+.performance-hero-headline h2 span {
+  display: inline;
+}
+
+.performance-hero-headline h2 span + span::before {
+  content: ' ';
+}
+
 .performance-hero-badges {
   position: relative;
   flex: 0 0 auto;
@@ -1646,12 +1654,30 @@
 }
 
 @media (max-width: 560px) {
+  .performance-shell {
+    --performance-mobile-semibold-size: 0.82rem;
+  }
+
+  .performance-topbar {
+    position: sticky;
+    justify-content: space-between;
+  }
+
+  .performance-title {
+    position: absolute;
+    left: 50%;
+    max-width: calc(100% - 150px);
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
   .performance-title span {
     display: none;
   }
 
   .performance-title h1 {
     font-size: 1.6rem;
+    white-space: nowrap;
   }
 
   .performance-topbar-actions {
@@ -1668,8 +1694,66 @@
     padding: 26px 22px;
   }
 
+  .performance-welcome,
+  .performance-pathway-meta,
+  .performance-pathway-meta strong,
+  .performance-eyebrow,
+  .performance-metric > span,
+  .performance-metric small,
+  .performance-projects-title,
+  .performance-project-list li,
+  .performance-fees-card p,
+  .performance-fees-details span,
+  .performance-fees-card > button,
+  .performance-badges-heading > div:first-child > span,
+  .performance-badges-count span,
+  .performance-badges-footer button,
+  .performance-activity-item strong,
+  .performance-activity-item div span,
+  .performance-members-heading p,
+  .performance-members-search-area > span {
+    font-size: var(--performance-mobile-semibold-size);
+  }
+
+  .performance-hero-headline {
+    display: grid;
+    grid-template-columns: minmax(0, auto) 76px;
+    align-items: start;
+    gap: 8px;
+    width: 100%;
+  }
+
   .performance-hero h2 {
-    font-size: 2.65rem;
+    font-size: 2.45rem;
+  }
+
+  .performance-hero-headline h2 span {
+    display: block;
+  }
+
+  .performance-hero-headline h2 span + span::before {
+    content: none;
+  }
+
+  .performance-hero-badges {
+    width: 76px;
+    height: 48px;
+    align-self: start;
+    margin-top: -4px;
+  }
+
+  .performance-hero-badges img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .performance-hero-badges img:nth-child(2) {
+    left: 36px;
+  }
+
+  .performance-hero-badges img:nth-child(3) {
+    left: 18px;
+    top: 18px;
   }
 
   .performance-pathway-meta {
@@ -1686,15 +1770,23 @@
   }
 
   .performance-metrics {
+    gap: 2px 8px;
+    margin: 18px 0;
     border-radius: 16px;
   }
 
   .performance-metric {
-    padding: 20px 10px;
+    gap: 3px;
+    padding: 14px 4px;
+  }
+
+  .performance-metric > span {
+    font-size: 0.72rem;
+    white-space: nowrap;
   }
 
   .performance-metric > strong {
-    font-size: 2.45rem;
+    font-size: 2.3rem;
   }
 
   .performance-card-heading {
@@ -1702,13 +1794,25 @@
   }
 
   .performance-levels {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin: 16px 0 18px;
+  }
+
+  .performance-level {
+    flex-direction: column;
+    gap: 6px;
   }
 
   .performance-level > i {
+    display: none;
+    width: 100%;
     height: 4px;
+  }
+
+  .performance-level.is-current > i {
+    display: block;
+    background: var(--pd-gold);
   }
 
   .performance-next-project {
@@ -1739,5 +1843,82 @@
 
   .performance-activity-item {
     gap: 14px;
+  }
+
+  .performance-points-help-button,
+  .performance-points-help-button:hover,
+  .performance-points-help-button:focus-visible {
+    width: 38px;
+    transition: none;
+    transform: none;
+  }
+
+  .performance-points-help-button span,
+  .performance-points-help-button:hover span,
+  .performance-points-help-button:focus-visible span {
+    display: none;
+    max-width: 0;
+    opacity: 0;
+    transition: none;
+  }
+
+  .performance-achievement-badges section > div:first-child {
+    margin-bottom: 20px;
+    gap: 8px;
+  }
+
+  .performance-achievement-badges section > div:first-child h2 {
+    font-size: 2.2rem;
+  }
+
+  .performance-achievement-badges section > div:first-child p {
+    font-size: var(--performance-mobile-semibold-size);
+    line-height: 1.35;
+  }
+
+  .badge-detail-content h3 {
+    margin-top: 18px;
+    font-size: 2.8rem;
+  }
+
+  .badge-detail-content p {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  .performance-members-heading {
+    align-items: center;
+    gap: 14px;
+    padding-inline: 18px;
+    text-align: center;
+  }
+
+  .performance-members-heading h2 {
+    font-size: 2.2rem;
+  }
+
+  .performance-members-search-area {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+  }
+
+  .performance-members-search-area > span {
+    flex: 0 0 auto;
+    order: 2;
+    white-space: nowrap;
+  }
+
+  .performance-members-search-row {
+    order: 1;
+    min-width: 0;
+  }
+
+  .performance-members-search-area label {
+    width: min(190px, 48vw);
   }
 }

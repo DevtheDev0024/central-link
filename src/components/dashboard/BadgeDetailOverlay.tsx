@@ -11,12 +11,12 @@ export default function BadgeDetailOverlay({ badge, isClosing, onClose }: BadgeD
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/72 px-5 py-8 text-center backdrop-blur-2xl ${
+      className={`badge-detail-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/72 px-5 py-8 text-center backdrop-blur-2xl ${
         isClosing ? 'animate-fade-out' : 'animate-fade-in'
       }`}
       onClick={onClose}
     >
-      <div className="flex w-full max-w-3xl flex-col items-center animate-slide-up">
+      <div className="badge-detail-content flex w-full max-w-3xl flex-col items-center animate-slide-up">
         <img
           src={badge.imageSrc}
           alt=""

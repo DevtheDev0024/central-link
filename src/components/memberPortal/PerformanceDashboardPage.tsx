@@ -194,7 +194,10 @@ export default function PerformanceDashboardPage() {
         <div className="performance-hero-copy">
           <span className="performance-welcome">Welcome Back!</span>
           <div className="performance-hero-headline">
-            <h2>Dulain Gunawardhana</h2>
+            <h2>
+              <span>Dulain</span>
+              <span>Gunawardhana</span>
+            </h2>
             <div className="performance-hero-badges" aria-label="Earned badges">
               {earnedBadges.slice(0, 3).map((badge) => (
                 <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
