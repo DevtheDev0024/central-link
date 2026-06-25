@@ -8,10 +8,13 @@ import {
   type ReactNode,
 } from 'react';
 import {
+  EmailAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
+  updatePassword,
   type User,
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
@@ -24,6 +27,7 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   getIdToken: () => Promise<string | null>;
 }
 
@@ -54,6 +58,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await sendPasswordResetEmail(auth, email);
   }, []);
 
+  const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser?.email) {
+      throw new Error('No signed-in account found.');
+    }
+
+    const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+    await reauthenticateWithCredential(currentUser, credential);
+    await updatePassword(currentUser, newPassword);
+  }, []);
+
   const getIdToken = useCallback(async () => {
     if (!auth.currentUser) return null;
     return auth.currentUser.getIdToken();
@@ -69,9 +84,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       signOut,
       resetPassword,
+      changePassword,
       getIdToken,
     }),
-    [user, loading, isAdmin, signIn, signOut, resetPassword, getIdToken],
+    [user, loading, isAdmin, signIn, signOut, resetPassword, changePassword, getIdToken],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

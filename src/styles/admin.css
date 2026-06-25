@@ -555,7 +555,7 @@
 .admin-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 100;
   display: grid;
   place-items: center;
   padding: 1.5rem;
@@ -564,6 +564,11 @@
 }
 
 .admin-modal {
+  --admin-navy: #1a2f5a;
+  --admin-navy-dark: #0f1d38;
+  --admin-gold: #e9d87a;
+  --admin-gold-hover: #e8c867;
+  --admin-border: rgba(26, 47, 90, 0.1);
   width: min(100%, 34rem);
   max-height: calc(100vh - 3rem);
   overflow-y: auto;
@@ -571,6 +576,8 @@
   padding: 1.5rem;
   background: #fff;
   box-shadow: 0 28px 80px rgba(15, 29, 56, 0.18);
+  color: #111827;
+  font-family: 'MyriadPro-Light', Arial, Helvetica, sans-serif;
 }
 
 .admin-modal-header {
@@ -654,6 +661,22 @@
   outline: none;
   border-color: var(--admin-navy);
   box-shadow: 0 0 0 3px rgba(244, 220, 138, 0.45);
+}
+
+.admin-form-field.has-error input {
+  border-color: #dc2626;
+}
+
+.admin-form-field.has-error input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.admin-field-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 0.78rem;
+  line-height: 1.35;
 }
 
 .admin-role-fieldset {
@@ -1020,6 +1043,14 @@
 
 .admin-error {
   color: #800020;
+}
+
+.admin-success {
+  margin: 0;
+  padding: 0.25rem 0 0.5rem;
+  color: var(--admin-navy);
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 @media (max-width: 1100px) {

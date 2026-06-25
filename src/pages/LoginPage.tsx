@@ -4,22 +4,11 @@ import { Lock, Mail } from 'lucide-react';
 import AuthLayout from '../components/auth/AuthLayout';
 import { AuthInput } from '../components/auth/AuthInput';
 import { useAuth } from '../context/AuthContext';
+import { getAuthErrorMessage } from '../lib/authErrors';
 import { getPostLoginRedirect, LOGIN_SIGNED_OUT_STATE, type LoginRedirectState } from '../lib/authNavigation';
 
-function getAuthErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    if (error.message.includes('invalid-credential') || error.message.includes('wrong-password')) {
-      return 'Incorrect email or password. Please try again.';
-    }
-    if (error.message.includes('user-not-found')) {
-      return 'No account found for that email.';
-    }
-    if (error.message.includes('too-many-requests')) {
-      return 'Too many attempts. Please wait a moment and try again.';
-    }
-  }
-
-  return 'Unable to sign in. Please check your credentials and try again.';
+function getLoginErrorMessage(error: unknown): string {
+  return getAuthErrorMessage(error, 'Unable to sign in. Please check your credentials and try again.');
 }
 
 export default function LoginPage() {
@@ -48,7 +37,7 @@ export default function LoginPage() {
       await signIn(email.trim(), password);
       navigate(redirectPath, { replace: true });
     } catch (submitError) {
-      setError(getAuthErrorMessage(submitError));
+      setError(getLoginErrorMessage(submitError));
     } finally {
       setSubmitting(false);
     }

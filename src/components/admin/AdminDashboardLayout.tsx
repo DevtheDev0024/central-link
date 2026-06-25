@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Award,
@@ -10,6 +11,7 @@ import {
   Users,
 } from 'lucide-react';
 import AccountFooterPanel from '../auth/AccountFooterPanel';
+import ChangePasswordModal from '../auth/ChangePasswordModal';
 import { useAuth } from '../../context/AuthContext';
 import { LOGIN_SIGNED_OUT_STATE } from '../../lib/authNavigation';
 import '../../styles/auth.css';
@@ -33,6 +35,7 @@ export default function AdminDashboardLayout({ children }: AdminDashboardLayoutP
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   const handleSignOut = () => {
     void signOut().then(() => {
@@ -88,9 +91,12 @@ export default function AdminDashboardLayout({ children }: AdminDashboardLayoutP
           email={user?.email}
           displayName={user?.displayName}
           variant="on-dark"
+          onChangePassword={() => setIsChangePasswordOpen(true)}
           onSignOut={handleSignOut}
         />
       </aside>
+
+      <ChangePasswordModal isOpen={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
 
       <main className="admin-main">{children}</main>
     </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Bell, ChevronRight, Menu, Search, Shield } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AccountFooterPanel from '../auth/AccountFooterPanel';
+import ChangePasswordModal from '../auth/ChangePasswordModal';
 import { useAuth } from '../../context/AuthContext';
 import { useMemberProfile } from '../../hooks/useMemberProfile';
 import { LOGIN_SIGNED_OUT_STATE } from '../../lib/authNavigation';
@@ -43,6 +44,7 @@ export default function MemberPortalLayout() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const closeMenu = () => setIsMenuOpen(false);
   const activeLabel = useActiveLabel();
@@ -76,6 +78,11 @@ export default function MemberPortalLayout() {
     void signOut().then(() => {
       navigate('/login', { replace: true, state: LOGIN_SIGNED_OUT_STATE });
     });
+  };
+
+  const handleChangePassword = () => {
+    setIsProfileMenuOpen(false);
+    setIsChangePasswordOpen(true);
   };
 
   return (
@@ -192,6 +199,7 @@ export default function MemberPortalLayout() {
                     email={email}
                     displayName={displayName}
                     variant="on-light"
+                    onChangePassword={handleChangePassword}
                     onSignOut={handleSignOut}
                   />
                 </div>
@@ -199,6 +207,8 @@ export default function MemberPortalLayout() {
             </div>
           </div>
         </header>
+
+        <ChangePasswordModal isOpen={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
 
         <main className="performance-content">
           <Outlet />
