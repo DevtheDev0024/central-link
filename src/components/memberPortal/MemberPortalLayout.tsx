@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, ChevronRight, Menu, Search, X } from 'lucide-react';
+import { Bell, ChevronRight, Menu, Search } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { MEMBER_PORTAL_BASE, memberPortalNav } from './navItems';
 import '../../styles/performance-dashboard.css';
@@ -29,9 +29,6 @@ export default function MemberPortalLayout() {
             <strong>Central Link</strong>
             <span>Division I • District 82</span>
           </div>
-          <button type="button" className="performance-menu-close" onClick={closeMenu} aria-label="Close menu">
-            <X size={22} />
-          </button>
         </div>
 
         <div className="performance-member">
