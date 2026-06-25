@@ -3,8 +3,6 @@ import {
   BookOpen,
   CalendarDays,
   Check,
-  ChevronRight,
-  CircleDollarSign,
   Mic2,
   Sparkles,
   Trophy,
@@ -125,15 +123,14 @@ export default function PerformanceDashboardPage() {
         </article>
 
         <article className="performance-card performance-fees-card">
-          <div className="performance-fees-icon"><CircleDollarSign size={24} /></div>
-          <span className="performance-eyebrow">Monthly fee dues</span>
-          <p>Paid through</p>
+          <span className="performance-eyebrow">Monthly Fee Dues</span>
+          <p>Paid Through</p>
           <h3>June 2026</h3>
           <div className="performance-fees-details">
-            <div><span>Next billing</span><strong>Jul 1, 2026</strong></div>
+            <div><span>Next Billing</span><strong>Jul 1, 2026</strong></div>
             <div><span>Amount</span><strong>LKR 500</strong></div>
           </div>
-          <button type="button">Open payment portal <ChevronRight size={18} /></button>
+          <button type="button">Open Payment Portal</button>
         </article>
 
         <article className="performance-card performance-activity-card">
