@@ -73,7 +73,7 @@ export default function TopPerformersSection({ members, lastUpdated }: TopPerfor
 
             <p className="mt-5 max-w-2xl text-base font-bold leading-6 text-white">
               Congratulations, you are the Central Link
-              <span className="font-['MyriadPro-Bold','MyriadPro-Light',Arial,sans-serif] font-bold text-toastmasters-gold-light">
+              <span className="font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-toastmasters-gold-light">
                 {' '}
                 Toastmaster of the Year!
               </span>

@@ -15,7 +15,7 @@ type MemberPerformanceSectionProps = {
 };
 
 const cellClass =
-  "font-['MyriadPro-Bold','MyriadPro-Light',Arial,sans-serif] text-[0.95rem] font-semibold text-slate-800";
+  "font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-slate-800";
 
 function SortIcon({
   field,
@@ -259,7 +259,7 @@ export default function MemberPerformanceSection({
                     <MemberGrowthProgress totalPoints={member.ajScore} compact />
                   </td>
                   <td className="sticky right-0 z-20 bg-white px-3 py-3 text-center shadow-[-8px_0_18px_rgba(15,29,56,0.05)] transition-colors group-hover:bg-[#f8fafc]">
-                    <span className="font-['MyriadPro-Bold','MyriadPro-Light',Arial,sans-serif] text-base font-extrabold text-[#781327]">
+                    <span className="font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-[#781327]">
                       {member.ajScore}
                     </span>
                   </td>
