@@ -539,7 +539,7 @@
 
 .performance-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.85fr);
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.95fr);
   gap: 24px;
 }
 
@@ -552,7 +552,7 @@
 }
 
 .performance-progress-card {
-  padding: clamp(24px, 3vw, 36px);
+  padding: clamp(22px, 2.5vw, 30px);
 }
 
 .performance-card-heading,
@@ -593,8 +593,8 @@
 .performance-levels {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  margin: 24px 0 20px;
+  gap: 13px;
+  margin: 18px 0 14px;
 }
 
 .performance-level {
@@ -605,13 +605,13 @@
 
 .performance-level > span {
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
   font-family: 'MyriadPro-Bold', Arial, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .performance-level > i {
@@ -658,8 +658,8 @@
 .performance-project-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin: 14px 0 0;
+  gap: 10px;
+  margin: 10px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -677,8 +677,8 @@
 
 .performance-project-mark {
   display: grid;
-  width: 27px;
-  height: 27px;
+  width: 24px;
+  height: 24px;
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
