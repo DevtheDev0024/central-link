@@ -7,15 +7,18 @@ import {
   ChevronRight,
   CircleDollarSign,
   Gauge,
+  HandCoins,
   Home,
   Menu,
+  Mic,
   Mic2,
   Network,
+  Route,
   Search,
-  ShieldCheck,
   Sparkles,
   Target,
   Trophy,
+  Users,
   UsersRound,
   X,
 } from 'lucide-react';
@@ -23,13 +26,13 @@ import '../styles/performance-dashboard.css';
 
 const navigationItems = [
   { label: 'Performance Dashboard', icon: Gauge, href: '#overview', active: true },
-  { label: 'Meeting Roles', icon: Mic2, href: '#activity' },
-  { label: 'Pathways', icon: Network, href: '#pathways' },
+  { label: 'Meeting Roles', icon: Mic, href: '#activity' },
+  { label: 'Pathways', icon: Route, href: '#pathways' },
   { label: 'Educational Achievements', icon: Award, href: '#achievements' },
-  { label: 'Club Leadership', icon: UsersRound, href: '#leadership' },
+  { label: 'Toastmasters Hierarchy', icon: Network, href: '#hierarchy' },
   { label: 'D82 Awards', icon: Trophy, href: '#awards' },
-  { label: 'Exco Roles & Duties', icon: ShieldCheck, href: '#leadership' },
-  { label: 'Monthly Fee Portal', icon: CircleDollarSign, href: '#fees' },
+  { label: 'Exco Roles & Duties', icon: Users, href: '#exco' },
+  { label: 'Monthly Fee Portal', icon: HandCoins, href: '#fees' },
 ];
 
 const metrics = [
@@ -57,7 +60,7 @@ export default function PerformanceDashboard() {
           <img src="/toastmasters-logo-white.png" alt="Toastmasters International" />
           <div>
             <strong>Central Link</strong>
-            <span>Division I · District 82</span>
+            <span>Division I • District 82</span>
           </div>
           <button type="button" className="performance-menu-close" onClick={closeMenu} aria-label="Close menu">
             <X size={22} />
@@ -66,18 +69,29 @@ export default function PerformanceDashboard() {
 
         <div className="performance-member">
           <div className="performance-avatar" aria-hidden="true">
-            DG
+            <svg viewBox="0 0 42 42">
+              <defs>
+                <clipPath id="performance-member-clip">
+                  <circle cx="21" cy="21" r="21" />
+                </clipPath>
+              </defs>
+              <g clipPath="url(#performance-member-clip)">
+                <rect width="42" height="42" fill="#d9d9d9" />
+                <circle cx="21" cy="16" r="7.5" fill="#9aa0a8" />
+                <circle cx="21" cy="38" r="14" fill="#9aa0a8" />
+              </g>
+            </svg>
           </div>
           <div>
             <strong>Dulain Gunawardhana</strong>
-            <span>Member · President</span>
+            <span>Member • President</span>
           </div>
         </div>
 
         <nav className="performance-nav" aria-label="Member portal">
           {navigationItems.map(({ label, icon: Icon, href, active }) => (
             <a key={label} href={href} className={active ? 'is-active' : ''} onClick={closeMenu}>
-              <Icon size={19} strokeWidth={1.8} />
+              <Icon size={21} strokeWidth={1.7} />
               <span>{label}</span>
             </a>
           ))}
@@ -86,7 +100,7 @@ export default function PerformanceDashboard() {
         <a className="performance-dues-mini" href="#fees" onClick={closeMenu}>
           <div>
             <strong>Monthly Fee Dues</strong>
-            <span><i /> Paid · June 2026</span>
+            <span><i /> Paid • June 2026</span>
           </div>
           <ChevronRight size={24} />
         </a>
