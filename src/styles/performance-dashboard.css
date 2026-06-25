@@ -213,6 +213,10 @@
   text-transform: uppercase;
 }
 
+.performance-eyebrow {
+  text-transform: none;
+}
+
 .performance-title h1 {
   margin: 4px 0 0;
   color: #004165;
@@ -586,13 +590,13 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
-  margin: 30px 0 28px;
+  margin: 24px 0 20px;
 }
 
 .performance-level {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  gap: 10px;
 }
 
 .performance-level > span {
@@ -607,8 +611,9 @@
 }
 
 .performance-level > i {
-  width: 100%;
+  width: auto;
   height: 6px;
+  flex: 1 1 auto;
   border-radius: 999px;
 }
 
@@ -638,7 +643,7 @@
 
 .performance-projects-title {
   display: block;
-  padding-bottom: 16px;
+  padding-bottom: 5px;
   border-bottom: 1px solid #e7e9ea;
   color: #9aa1a5;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
@@ -648,8 +653,8 @@
 .performance-project-list {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  margin: 22px 0 0;
+  gap: 14px;
+  margin: 14px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -661,6 +666,7 @@
   color: var(--pd-navy);
   font-family: 'MyriadPro-Bold', Arial, sans-serif;
   font-size: 1.1rem;
+  line-height: 1.15;
 }
 
 .performance-project-mark {
@@ -1010,16 +1016,12 @@
 
   .performance-levels {
     grid-template-columns: 1fr;
-    margin-bottom: 25px;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
-  .performance-level > div i {
+  .performance-level > i {
     height: 4px;
-  }
-
-  .performance-level small {
-    max-width: none;
-    margin: -23px 0 13px 41px;
   }
 
   .performance-next-project {
