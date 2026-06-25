@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, ChevronRight } from 'lucide-react';
 import type { BadgeDefinition } from '../../types/badges';
+import type { Member } from '../../types/member';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
+import MemberPerformanceSection from '../dashboard/MemberPerformanceSection';
 
 const metrics = [
   { label: 'Speeches Delivered', value: '8', note: '2 this term' },
@@ -43,6 +45,44 @@ const pathwayProjects = [
   { name: 'Managing a Difficult Audience', done: false },
 ];
 
+const performanceMembers: Member[] = [
+  ['Thebuk Rabathialke', 40, 25, 30, 65, 15, 0, 0, 123],
+  ['Dulain Gunawardhana', 35, 30, 25, 50, 20, 10, 5, 118],
+  ['Sachini Perera', 30, 28, 20, 45, 15, 10, 10, 112],
+  ['Nimesh Fernando', 25, 24, 28, 40, 20, 5, 10, 108],
+  ['Amaya Jayasinghe', 30, 20, 25, 35, 15, 10, 5, 104],
+  ['Kavindu Silva', 20, 25, 20, 35, 10, 15, 10, 98],
+  ['Tharushi Wickramasinghe', 25, 20, 18, 30, 15, 10, 5, 94],
+  ['Ravindu Senanayake', 20, 18, 20, 25, 15, 10, 5, 88],
+  ['Sanduni Wijesinghe', 18, 20, 15, 25, 10, 8, 5, 84],
+  ['Dinuka Amarasinghe', 20, 16, 18, 20, 10, 10, 5, 81],
+  ['Hasini de Silva', 16, 18, 14, 22, 10, 8, 6, 78],
+  ['Pasindu Jayawardena', 15, 16, 15, 20, 8, 10, 5, 74],
+  ['Shenali Fernando', 18, 15, 12, 18, 10, 6, 4, 71],
+  ['Akila Perera', 14, 15, 14, 16, 8, 7, 5, 68],
+  ['Mihiri Gunasekara', 15, 12, 13, 15, 8, 6, 5, 64],
+  ['Janith Bandara', 12, 14, 10, 14, 7, 5, 4, 59],
+].map(([name, levels, projects, awards, contests, training, education, mentoring, total]) => ({
+  name: name as string,
+  levelCompletion: levels as number,
+  projectCompletion: projects as number,
+  meetingAwards: awards as number,
+  contestExcellence: contests as number,
+  evaluationContribution: 0,
+  trainingPrograms: training as number,
+  educationalSessions: education as number,
+  mentoringAssignments: mentoring as number,
+  leadershipRoles: 0,
+  clubEvents: 0,
+  clubContestContribution: 0,
+  visitingToastmaster: 0,
+  meetingRolesPoints: 0,
+  totalPoints: total as number,
+  aiScore: 0,
+  ajScore: total as number,
+  meetingRoles: [],
+}));
+
 function groupBadges<T>(badges: T[]) {
   const rowCount = Math.ceil(badges.length / 4);
   const minimumRowSize = Math.floor(badges.length / rowCount);
@@ -63,7 +103,34 @@ export default function PerformanceDashboardPage() {
   const badgeRows = groupBadges(earnedBadges);
   const [selectedBadge, setSelectedBadge] = useState<BadgeDefinition | null>(null);
   const [isBadgeDetailClosing, setIsBadgeDetailClosing] = useState(false);
+  const [memberSearchTerm, setMemberSearchTerm] = useState('');
+  const [memberSortField, setMemberSortField] = useState<keyof Member>('ajScore');
+  const [memberSortDirection, setMemberSortDirection] = useState<'asc' | 'desc'>('desc');
   const badgeCloseTimeoutRef = useRef<number | null>(null);
+
+  const visibleMembers = performanceMembers
+    .filter((member) => member.name.toLowerCase().includes(memberSearchTerm.toLowerCase()))
+    .sort((first, second) => {
+      const firstValue = first[memberSortField];
+      const secondValue = second[memberSortField];
+      const direction = memberSortDirection === 'asc' ? 1 : -1;
+
+      if (typeof firstValue === 'number' && typeof secondValue === 'number') {
+        return (firstValue - secondValue) * direction;
+      }
+
+      return String(firstValue).localeCompare(String(secondValue)) * direction;
+    });
+
+  const handleMemberSort = (field: keyof Member) => {
+    if (memberSortField === field) {
+      setMemberSortDirection((direction) => (direction === 'asc' ? 'desc' : 'asc'));
+      return;
+    }
+
+    setMemberSortField(field);
+    setMemberSortDirection('desc');
+  };
 
   const openSelectedBadge = (badge: BadgeDefinition) => {
     if (badgeCloseTimeoutRef.current) {
@@ -242,6 +309,21 @@ export default function PerformanceDashboardPage() {
 
       <div className="performance-achievement-badges">
         <BadgeGridSection onBadgeClick={openSelectedBadge} />
+      </div>
+
+      <div className="performance-member-performance">
+        <MemberPerformanceSection
+          members={visibleMembers}
+          searchTerm={memberSearchTerm}
+          onSearchChange={setMemberSearchTerm}
+          sortField={memberSortField}
+          sortDirection={memberSortDirection}
+          onSort={handleMemberSort}
+          onMemberSelect={() => undefined}
+          onOpenPointsModal={() => undefined}
+          variant="performance-dashboard"
+          totalMemberCount={32}
+        />
       </div>
 
       <BadgeDetailOverlay badge={selectedBadge} isClosing={isBadgeDetailClosing} onClose={closeSelectedBadge} />

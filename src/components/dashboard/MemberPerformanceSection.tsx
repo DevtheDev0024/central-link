@@ -12,6 +12,8 @@ type MemberPerformanceSectionProps = {
   onSort: (field: keyof Member) => void;
   onMemberSelect: (member: Member) => void;
   onOpenPointsModal: () => void;
+  variant?: 'default' | 'performance-dashboard';
+  totalMemberCount?: number;
 };
 
 const cellClass =
@@ -68,6 +70,95 @@ function MeetingRoleTags({ roles, variant }: { roles: string[]; variant: 'mobile
   );
 }
 
+function PerformanceDashboardTable({
+  members,
+  searchTerm,
+  onSearchChange,
+  sortField,
+  sortDirection,
+  onSort,
+  totalMemberCount,
+}: Pick<
+  MemberPerformanceSectionProps,
+  'members' | 'searchTerm' | 'onSearchChange' | 'sortField' | 'sortDirection' | 'onSort' | 'totalMemberCount'
+>) {
+  const columns = TABLE_METRICS.filter((metric) => metric.field !== 'ajScore');
+
+  return (
+    <section className="performance-members-card">
+      <div className="performance-members-heading">
+        <div>
+          <h2>Member Performance</h2>
+          <p>Individual progress across education, roles, visits, contests, and total points.</p>
+        </div>
+        <div className="performance-members-search-area">
+          <span>{totalMemberCount ?? members.length} Members</span>
+          <label>
+            <Search size={21} strokeWidth={2} />
+            <input
+              type="search"
+              value={searchTerm}
+              onChange={(event) => onSearchChange(event.target.value)}
+              placeholder="Search Members"
+              aria-label="Search members"
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className="performance-members-table-scroll">
+        <table className="performance-members-table">
+          <thead>
+            <tr>
+              <th onClick={() => onSort('name')}>
+                Name <SortIcon field="name" sortField={sortField} sortDirection={sortDirection} />
+              </th>
+              {columns.map((column) => (
+                <th key={column.field} onClick={() => onSort(column.field)}>
+                  {column.shortLabel}{' '}
+                  <SortIcon field={column.field} sortField={sortField} sortDirection={sortDirection} />
+                </th>
+              ))}
+              <th>Growth</th>
+              <th onClick={() => onSort('ajScore')}>
+                Total <SortIcon field="ajScore" sortField={sortField} sortDirection={sortDirection} />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.map((member, index) => {
+              const growth = Math.min(100, Math.round((member.ajScore / 186) * 100));
+
+              return (
+                <tr key={`${member.name}-${index}`}>
+                  <td>
+                    <span className="performance-member-rank">{index + 1}</span>
+                    <strong>{member.name}</strong>
+                  </td>
+                  {columns.map((column) => (
+                    <td key={column.field}>{member[column.field] as number}</td>
+                  ))}
+                  <td>
+                    <div className="performance-member-growth">
+                      <span>{growth}% Growth</span>
+                      <i><b style={{ width: `${growth}%` }} /></i>
+                    </div>
+                  </td>
+                  <td>{member.ajScore}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {members.length === 0 && (
+        <div className="performance-members-empty">No members found matching “{searchTerm}”</div>
+      )}
+    </section>
+  );
+}
+
 export default function MemberPerformanceSection({
   members,
   searchTerm,
@@ -77,7 +168,23 @@ export default function MemberPerformanceSection({
   onSort,
   onMemberSelect,
   onOpenPointsModal,
+  variant = 'default',
+  totalMemberCount,
 }: MemberPerformanceSectionProps) {
+  if (variant === 'performance-dashboard') {
+    return (
+      <PerformanceDashboardTable
+        members={members}
+        searchTerm={searchTerm}
+        onSearchChange={onSearchChange}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        totalMemberCount={totalMemberCount}
+      />
+    );
+  }
+
   return (
     <section>
       <div className="text-center">
