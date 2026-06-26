@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { ChevronRight } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
+import { BADGE_DEFINITIONS } from '../../data/badgeDefinitions';
 import type { BadgeDefinition } from '../../types/badges';
 import type { PointsModalTab } from '../../types/badges';
 import type { Member } from '../../types/member';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { useMemberProfile } from '../../hooks/useMemberProfile';
+import { getMemberBadges } from '../../utils/badgeLogic';
 import type { MemberPortalOutletContext } from './MemberPortalLayout';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
@@ -17,17 +19,6 @@ const activities = [
   { title: 'Completed General Evaluator Role', detail: 'June 20 • ESU TMC', points: '+18 pts' },
   { title: 'Delivered “Guilty, Your Honor”', detail: 'June 13 • Central Link TMC', points: '+35 pts' },
   { title: 'Visit Another Club', detail: 'June 6 • Dowels TMC', points: '+10 pts' },
-];
-
-// Placeholder set — earned badges will be fetched/routed per member later.
-const earnedBadges = [
-  { name: 'Pathways Achiever', image: '/badges/Pathways-Achiever.png' },
-  { name: 'Contest Supporter', image: '/badges/Contest-Supporter.png' },
-  { name: 'Leadership Contributor', image: '/badges/Leadership-Contributor.png' },
-  { name: 'Learning Enthusiast', image: '/badges/Learning-Enthusiast.png' },
-  { name: 'Evaluation Champion', image: '/badges/Evaluation-Champion.png' },
-  { name: 'Contest Star', image: '/badges/Contest-Star.png' },
-  { name: 'Meeting Star', image: '/badges/Meeting-Star.png' },
 ];
 
 function groupBadges<T>(badges: T[]) {
@@ -86,6 +77,16 @@ export default function PerformanceDashboardPage() {
     },
   ];
 
+  // Earned badges are derived from the member's points via the same benchmark
+  // rules the old dashboard uses (getMemberBadges -> getScore >= benchmark).
+  const earnedBadges = useMemo(
+    () =>
+      (currentMember ? getMemberBadges(currentMember).earned : []).map((badge) => ({
+        name: badge.name,
+        image: badge.imageSrc,
+      })),
+    [currentMember],
+  );
   const badgeRows = groupBadges(earnedBadges);
   const [selectedBadge, setSelectedBadge] = useState<BadgeDefinition | null>(null);
   const [isBadgeDetailClosing, setIsBadgeDetailClosing] = useState(false);
@@ -250,11 +251,13 @@ export default function PerformanceDashboardPage() {
                 <span key={`${part}-${index}`}>{part}</span>
               ))}
             </h2>
-            <div className="performance-hero-badges" aria-label="Earned badges">
-              {earnedBadges.slice(0, 3).map((badge) => (
-                <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
-              ))}
-            </div>
+            {earnedBadges.length > 0 ? (
+              <div className="performance-hero-badges" aria-label="Earned badges">
+                {earnedBadges.slice(0, 3).map((badge) => (
+                  <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="performance-pathway-meta">
             <span>Pathway: <strong>Presentation Mastery</strong></span>
@@ -318,18 +321,22 @@ export default function PerformanceDashboardPage() {
               <h3>Earned Badges</h3>
             </div>
             <div className="performance-badges-count">
-              <strong>7</strong>
-              <span>of 12</span>
+              <strong>{earnedBadges.length}</strong>
+              <span>of {BADGE_DEFINITIONS.length}</span>
             </div>
           </div>
           <div className="performance-earned-badges" aria-label="Earned badges">
-            {badgeRows.map((row, rowIndex) => (
-              <div key={rowIndex} className="performance-earned-badges-row">
-                {row.map((badge) => (
-                  <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
-                ))}
-              </div>
-            ))}
+            {earnedBadges.length > 0 ? (
+              badgeRows.map((row, rowIndex) => (
+                <div key={rowIndex} className="performance-earned-badges-row">
+                  {row.map((badge) => (
+                    <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
+                  ))}
+                </div>
+              ))
+            ) : (
+              <p className="performance-earned-badges-empty">No badges earned</p>
+            )}
           </div>
           <div className="performance-badges-footer">
             <button type="button">View All <ChevronRight size={20} /></button>

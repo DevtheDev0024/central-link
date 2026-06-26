@@ -1134,6 +1134,16 @@
   gap: 4px;
 }
 
+.performance-earned-badges-empty {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .performance-earned-badges-row img {
   width: clamp(58px, 5vw, 72px);
   height: clamp(58px, 5vw, 72px);
