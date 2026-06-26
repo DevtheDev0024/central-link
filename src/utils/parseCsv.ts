@@ -85,6 +85,7 @@ export function parseCSV(csvText: string): Member[] {
 
       const member: Member = {
         name: memberName,
+        membershipNumber: getValue(values, 'MEMBERSHIP NUMBER', 'MEMBER ID', 'MEMBERSHIP NO'),
         levelCompletion: getNumber(values, 'LEVEL COMPLETIONS', 'LEVEL COMPLETION'),
         projectCompletion: getNumber(values, 'PROJECT COMPLETIONS', 'PROJECT COMPLETION'),
         meetingAwards: getNumber(values, 'MEETING AWARDS'),

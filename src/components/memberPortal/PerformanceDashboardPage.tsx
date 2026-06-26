@@ -29,6 +29,13 @@ type MemberActivity = {
 // card below renders real items and their points as soon as data is available.
 const recentActivities: MemberActivity[] = [];
 
+// Membership number is the shared key between Firestore accounts and the
+// spreadsheet. Normalise both sides (strip whitespace, upper-case) so formats
+// like "PN-67632735" / "pn-67632735" compare equal.
+function normalizeMembershipNumber(value: string | undefined | null): string {
+  return (value ?? '').replace(/\s+/g, '').toUpperCase();
+}
+
 function groupBadges<T>(badges: T[]) {
   const rowCount = Math.ceil(badges.length / 4);
   const minimumRowSize = Math.floor(badges.length / rowCount);
@@ -48,15 +55,25 @@ function groupBadges<T>(badges: T[]) {
 export default function PerformanceDashboardPage() {
   const { programKey } = useOutletContext<MemberPortalOutletContext>();
   const { members: clubMembers } = useDashboardData(programKey);
-  const { displayName } = useMemberProfile();
+  const { displayName, membershipNumber } = useMemberProfile();
 
-  // The signed-in member's row in the selected programme sheet (null until a
-  // member whose name matches the spreadsheet is signed in).
+  // The signed-in member's row in the selected programme sheet. Membership
+  // number is the canonical key: match on it first, then fall back to a name
+  // match so members without a membership number on either side still resolve
+  // (the spreadsheet ID columns are being populated incrementally).
   const currentMember = useMemo(() => {
-    const target = displayName.trim().toLowerCase();
-    if (!target) return null;
-    return clubMembers.find((member) => member.name.trim().toLowerCase() === target) ?? null;
-  }, [clubMembers, displayName]);
+    const targetId = normalizeMembershipNumber(membershipNumber);
+    if (targetId) {
+      const byId = clubMembers.find(
+        (member) => normalizeMembershipNumber(member.membershipNumber) === targetId,
+      );
+      if (byId) return byId;
+    }
+
+    const targetName = displayName.trim().toLowerCase();
+    if (!targetName) return null;
+    return clubMembers.find((member) => member.name.trim().toLowerCase() === targetName) ?? null;
+  }, [clubMembers, membershipNumber, displayName]);
 
   const currentMemberRank = useMemo(() => {
     if (!currentMember) return null;

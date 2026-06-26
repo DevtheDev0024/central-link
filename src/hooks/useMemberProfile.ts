@@ -6,6 +6,7 @@ import { db } from '../lib/firebase';
 type MemberProfile = {
   displayName: string;
   email: string;
+  membershipNumber: string;
   roleLabel: string;
   initials: string;
 };
@@ -23,11 +24,13 @@ export function useMemberProfile(): MemberProfile {
   const { user, isAdmin } = useAuth();
   const [clubRole, setClubRole] = useState<string | null>(null);
   const [firestoreName, setFirestoreName] = useState<string | null>(null);
+  const [membershipNumber, setMembershipNumber] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user?.uid) {
       setClubRole(null);
       setFirestoreName(null);
+      setMembershipNumber(null);
       return;
     }
 
@@ -35,6 +38,7 @@ export function useMemberProfile(): MemberProfile {
       const data = snapshot.data();
       setClubRole(data?.clubRole ? String(data.clubRole) : null);
       setFirestoreName(data?.displayName ? String(data.displayName) : null);
+      setMembershipNumber(data?.membershipNumber ? String(data.membershipNumber) : null);
     });
 
     return unsubscribe;
@@ -54,6 +58,7 @@ export function useMemberProfile(): MemberProfile {
   return {
     displayName,
     email,
+    membershipNumber: membershipNumber?.trim() ?? '',
     roleLabel: roleParts.join(' • '),
     initials: getInitials(displayName),
   };
