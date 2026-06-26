@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "dev:server": "npm run dev --prefix server",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-spa-fallback.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
