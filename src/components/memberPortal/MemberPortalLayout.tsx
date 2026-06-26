@@ -18,6 +18,10 @@ const programOptions = (Object.entries(DASHBOARD_SOURCES) as Array<
   label: source.label.replace(' Dashboard', ''),
 }));
 
+export type MemberPortalOutletContext = {
+  programKey: DashboardYearKey;
+};
+
 function useActiveLabel() {
   const { pathname } = useLocation();
   const normalized = pathname.replace(/\/+$/, '') || MEMBER_PORTAL_BASE;
@@ -233,7 +237,7 @@ export default function MemberPortalLayout() {
         <ChangePasswordModal isOpen={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
 
         <main className="performance-content">
-          <Outlet />
+          <Outlet context={{ programKey: selectedProgramKey } satisfies MemberPortalOutletContext} />
         </main>
       </div>
     </div>

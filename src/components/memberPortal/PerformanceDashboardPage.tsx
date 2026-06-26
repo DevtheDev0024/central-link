@@ -1,20 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { ChevronRight } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
 import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
 import type { BadgeDefinition } from '../../types/badges';
 import type { PointsModalTab } from '../../types/badges';
 import type { Member } from '../../types/member';
+import { useDashboardData } from '../../hooks/useDashboardData';
+import { useMemberProfile } from '../../hooks/useMemberProfile';
+import type { MemberPortalOutletContext } from './MemberPortalLayout';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
 import MemberPerformanceSection from '../dashboard/MemberPerformanceSection';
 import PointsModal from '../dashboard/PointsModal';
-
-const metrics = [
-  { label: 'Speeches Delivered', value: '8', note: '2 this term' },
-  { label: 'Roles Taken', value: '14', note: '+5 this term' },
-  { label: 'Meetings Attended', value: '10', note: '92% Attendance' },
-  { label: 'Member Points', value: '312', note: 'Rank #2 in Club' },
-];
 
 const activities = [
   { title: 'Completed General Evaluator Role', detail: 'June 20 • ESU TMC', points: '+18 pts' },
@@ -33,44 +30,6 @@ const earnedBadges = [
   { name: 'Meeting Star', image: '/badges/Meeting-Star.png' },
 ];
 
-const performanceMembers: Member[] = [
-  ['Thebuk Rabathialke', 40, 25, 30, 65, 15, 0, 0, 123],
-  ['Dulain Gunawardhana', 35, 30, 25, 50, 20, 10, 5, 118],
-  ['Sachini Perera', 30, 28, 20, 45, 15, 10, 10, 112],
-  ['Nimesh Fernando', 25, 24, 28, 40, 20, 5, 10, 108],
-  ['Amaya Jayasinghe', 30, 20, 25, 35, 15, 10, 5, 104],
-  ['Kavindu Silva', 20, 25, 20, 35, 10, 15, 10, 98],
-  ['Tharushi Wickramasinghe', 25, 20, 18, 30, 15, 10, 5, 94],
-  ['Ravindu Senanayake', 20, 18, 20, 25, 15, 10, 5, 88],
-  ['Sanduni Wijesinghe', 18, 20, 15, 25, 10, 8, 5, 84],
-  ['Dinuka Amarasinghe', 20, 16, 18, 20, 10, 10, 5, 81],
-  ['Hasini de Silva', 16, 18, 14, 22, 10, 8, 6, 78],
-  ['Pasindu Jayawardena', 15, 16, 15, 20, 8, 10, 5, 74],
-  ['Shenali Fernando', 18, 15, 12, 18, 10, 6, 4, 71],
-  ['Akila Perera', 14, 15, 14, 16, 8, 7, 5, 68],
-  ['Mihiri Gunasekara', 15, 12, 13, 15, 8, 6, 5, 64],
-  ['Janith Bandara', 12, 14, 10, 14, 7, 5, 4, 59],
-].map(([name, levels, projects, awards, contests, training, education, mentoring, total]) => ({
-  name: name as string,
-  levelCompletion: levels as number,
-  projectCompletion: projects as number,
-  meetingAwards: awards as number,
-  contestExcellence: contests as number,
-  evaluationContribution: 0,
-  trainingPrograms: training as number,
-  educationalSessions: education as number,
-  mentoringAssignments: mentoring as number,
-  leadershipRoles: 0,
-  clubEvents: 0,
-  clubContestContribution: 0,
-  visitingToastmaster: 0,
-  meetingRolesPoints: 0,
-  totalPoints: total as number,
-  aiScore: 0,
-  ajScore: total as number,
-  meetingRoles: [],
-}));
-
 function groupBadges<T>(badges: T[]) {
   const rowCount = Math.ceil(badges.length / 4);
   const minimumRowSize = Math.floor(badges.length / rowCount);
@@ -88,6 +47,45 @@ function groupBadges<T>(badges: T[]) {
 }
 
 export default function PerformanceDashboardPage() {
+  const { programKey } = useOutletContext<MemberPortalOutletContext>();
+  const { members: clubMembers } = useDashboardData(programKey);
+  const { displayName } = useMemberProfile();
+
+  // The signed-in member's row in the selected programme sheet (null until a
+  // member whose name matches the spreadsheet is signed in).
+  const currentMember = useMemo(() => {
+    const target = displayName.trim().toLowerCase();
+    if (!target) return null;
+    return clubMembers.find((member) => member.name.trim().toLowerCase() === target) ?? null;
+  }, [clubMembers, displayName]);
+
+  const currentMemberRank = useMemo(() => {
+    if (!currentMember) return null;
+    const ranked = [...clubMembers].sort((first, second) => second.ajScore - first.ajScore);
+    const index = ranked.findIndex((member) => member.name === currentMember.name);
+    return index >= 0 ? index + 1 : null;
+  }, [clubMembers, currentMember]);
+
+  // Per-member cards fall back to the UI-development placeholders until a
+  // matching member exists in the sheet. Fields without a sheet column
+  // (speeches, meetings attended, week streak, pathway, level) stay as stubs.
+  const heroName = displayName.trim() || 'Member';
+  const heroPoints = currentMember ? currentMember.totalPoints.toLocaleString() : '312';
+  const metrics = [
+    { label: 'Speeches Delivered', value: '8', note: '2 this term' },
+    {
+      label: 'Roles Taken',
+      value: currentMember ? String(currentMember.meetingRoles.length) : '14',
+      note: '+5 this term',
+    },
+    { label: 'Meetings Attended', value: '10', note: '92% Attendance' },
+    {
+      label: 'Member Points',
+      value: currentMember ? currentMember.totalPoints.toLocaleString() : '312',
+      note: currentMemberRank ? `Rank #${currentMemberRank} in Club` : 'Rank #2 in Club',
+    },
+  ];
+
   const badgeRows = groupBadges(earnedBadges);
   const [selectedBadge, setSelectedBadge] = useState<BadgeDefinition | null>(null);
   const [isBadgeDetailClosing, setIsBadgeDetailClosing] = useState(false);
@@ -102,11 +100,11 @@ export default function PerformanceDashboardPage() {
   const badgeCloseTimeoutRef = useRef<number | null>(null);
   const leaderboardCardRef = useRef<HTMLElement | null>(null);
   const topPerformers = useMemo(() => {
-    return [...performanceMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
-  }, []);
+    return [...clubMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
+  }, [clubMembers]);
   const topPerformerScore = Math.max(...topPerformers.map((member) => member.ajScore), 1);
 
-  const visibleMembers = performanceMembers
+  const visibleMembers = clubMembers
     .filter((member) => member.name.toLowerCase().includes(memberSearchTerm.toLowerCase()))
     .sort((first, second) => {
       const firstValue = first[memberSortField];
@@ -248,8 +246,9 @@ export default function PerformanceDashboardPage() {
           <span className="performance-welcome">Welcome Back!</span>
           <div className="performance-hero-headline">
             <h2>
-              <span>Dulain</span>
-              <span>Gunawardhana</span>
+              {heroName.split(/\s+/).map((part, index) => (
+                <span key={`${part}-${index}`}>{part}</span>
+              ))}
             </h2>
             <div className="performance-hero-badges" aria-label="Earned badges">
               {earnedBadges.slice(0, 3).map((badge) => (
@@ -265,7 +264,7 @@ export default function PerformanceDashboardPage() {
 
         <div className="performance-hero-score">
           <div>
-            <strong>312</strong>
+            <strong>{heroPoints}</strong>
             <span>Points</span>
           </div>
           <div>
@@ -315,7 +314,7 @@ export default function PerformanceDashboardPage() {
         <article className="performance-card performance-badges-card">
           <div className="performance-badges-heading">
             <div>
-              <span>Dulain Gunawardhana</span>
+              <span>{heroName}</span>
               <h3>Earned Badges</h3>
             </div>
             <div className="performance-badges-count">
@@ -372,7 +371,7 @@ export default function PerformanceDashboardPage() {
       <div className="performance-member-performance">
         <MemberPerformanceSection
           members={visibleMembers}
-          rankingMembers={performanceMembers}
+          rankingMembers={clubMembers}
           searchTerm={memberSearchTerm}
           onSearchChange={setMemberSearchTerm}
           sortField={memberSortField}
@@ -381,7 +380,7 @@ export default function PerformanceDashboardPage() {
           onMemberSelect={() => undefined}
           onOpenPointsModal={openPointsModal}
           variant="performance-dashboard"
-          totalMemberCount={32}
+          totalMemberCount={clubMembers.length}
         />
       </div>
 
