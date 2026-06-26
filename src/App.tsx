@@ -2,7 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import LandingPage from './components/LandingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import InDevelopmentPage from './components/memberPortal/InDevelopmentPage';
+import MeetingRolesPage from './components/memberPortal/MeetingRolesPage';
 import MemberPortalLayout from './components/memberPortal/MemberPortalLayout';
+import PathwaysPage from './components/memberPortal/PathwaysPage';
 import PerformanceDashboardPage from './components/memberPortal/PerformanceDashboardPage';
 import { memberPortalNav } from './components/memberPortal/navItems';
 import { DASHBOARD_SOURCES, type DashboardYearKey } from './config/dashboardYears';
@@ -46,8 +48,10 @@ function App() {
           }
         >
           <Route index element={<PerformanceDashboardPage />} />
+          <Route path="pathways" element={<PathwaysPage />} />
+          <Route path="meeting-roles" element={<MeetingRolesPage />} />
           {memberPortalNav
-            .filter((item) => item.slug)
+            .filter((item) => item.slug && item.slug !== 'pathways' && item.slug !== 'meeting-roles')
             .map((item) => (
               <Route
                 key={item.slug}

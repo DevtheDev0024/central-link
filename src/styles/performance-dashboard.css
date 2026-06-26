@@ -1028,18 +1028,31 @@
   padding-top: 10px;
 }
 
-.performance-badges-footer button {
+.performance-badges-footer button,
+.performance-badges-footer a {
   display: flex;
   align-items: center;
   gap: 5px;
   border: 0;
   padding: 0;
   background: transparent;
-  color: white;
+  color: var(--pd-blue);
   cursor: pointer;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1rem;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.performance-badges-footer button {
+  color: white;
+}
+
+.performance-progress-card .performance-badges-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e7e9ea;
+  justify-content: flex-end;
 }
 
 .performance-activity-card {
@@ -1114,6 +1127,962 @@
 
 .performance-member-performance {
   margin-top: 24px;
+}
+
+/* Pathways page */
+.performance-pathways-grid .performance-progress-card {
+  grid-column: span 3;
+}
+
+.performance-pathways-grid .performance-pathways-points-card {
+  grid-column: span 2;
+}
+
+.performance-pathways-points-card {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 31px;
+  border: 0;
+  background: #004165;
+  color: white;
+}
+
+.performance-pathways-points-card .performance-eyebrow {
+  color: var(--pd-gold);
+}
+
+.performance-pathways-points-card > p {
+  margin: 29px 0 3px;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-pathways-points-card > h3 {
+  margin: 0;
+  color: white;
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: 2.8rem;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.performance-pathways-points-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.34);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.34);
+  padding: 18px 0;
+}
+
+.performance-pathways-points-breakdown > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.performance-pathways-points-breakdown svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--pd-gold);
+}
+
+.performance-pathways-points-breakdown span,
+.performance-pathways-points-breakdown strong,
+.performance-pathways-points-breakdown small {
+  display: block;
+}
+
+.performance-pathways-points-breakdown span {
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.performance-pathways-points-breakdown strong {
+  margin-top: 2px;
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.performance-pathways-points-breakdown small {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.performance-pathways-points-card > button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-self: center;
+  margin-top: 22px;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: var(--pd-gold);
+  color: #0b0b0b;
+  cursor: pointer;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-pathways-levels {
+  margin-top: 28px;
+}
+
+.performance-pathways-levels-heading {
+  margin-bottom: 18px;
+}
+
+.performance-pathways-levels-heading h3 {
+  margin: 4px 0 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.performance-pathways-levels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.performance-level-card {
+  padding: clamp(20px, 2.5vw, 26px);
+}
+
+.performance-level-card.is-current {
+  border-color: var(--pd-gold);
+  box-shadow: 0 14px 35px rgba(243, 217, 109, 0.18);
+}
+
+.performance-level-card.is-locked {
+  opacity: 0.72;
+}
+
+.performance-level-card-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.performance-level-card-badge {
+  flex: 0 0 auto;
+}
+
+.performance-level-card-badge span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-level-card.is-complete .performance-level-card-badge span {
+  background: #37be67;
+  color: white;
+}
+
+.performance-level-card.is-current .performance-level-card-badge span {
+  background: var(--pd-gold);
+  color: #52440d;
+}
+
+.performance-level-card.is-locked .performance-level-card-badge span {
+  background: #e4e7e9;
+  color: #aeb4b8;
+}
+
+.performance-level-card-heading h3 {
+  margin: 4px 0 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.performance-level-card-heading .performance-percent {
+  margin-left: auto;
+}
+
+.performance-level-locked-note {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid #e7e9ea;
+  color: #9aa1a5;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.performance-pathways-activity {
+  margin-top: 28px;
+  padding: 26px 38px;
+}
+
+.performance-pathways-intro,
+.performance-pathways-scoring-card {
+  margin-top: 0;
+  padding: clamp(22px, 2.5vw, 30px);
+}
+
+.performance-pathways-scoring-card {
+  margin-top: 28px;
+}
+
+.performance-pathways-intro > p,
+.performance-pathways-scoring-card > p {
+  margin: 14px 0 0;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.performance-pathways-intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-top: 16px;
+}
+
+.performance-pathways-intro-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pd-blue);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.performance-pathways-intro-links a:hover {
+  text-decoration: underline;
+}
+
+.performance-pathways-points-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 240px));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.performance-pathways-points-grid .performance-meeting-roles-points-item {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  min-height: 0;
+}
+
+.performance-pathways-points-grid .performance-meeting-roles-points-item > span {
+  flex: none;
+}
+
+.performance-pathways-points-grid .performance-meeting-roles-points-item .performance-meeting-role-points {
+  align-self: flex-start;
+}
+
+.performance-pathways-catalog {
+  margin-top: 28px;
+}
+
+.performance-pathways-catalog-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.performance-pathways-catalog-heading-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.performance-pathways-catalog-heading h3 {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.performance-pathways-catalog-stats {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.performance-pathways-catalog-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 96px;
+  padding: 10px 14px;
+  border: 1px solid #e7e9ea;
+  border-radius: 14px;
+  background: #f8fafb;
+}
+
+.performance-pathways-catalog-stats strong {
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.performance-pathways-catalog-stats span {
+  color: #7a868c;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.performance-pathways-catalog-note {
+  margin: 0;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.performance-pathways-catalog-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.performance-pathway-catalog-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(20px, 2.5vw, 28px);
+}
+
+.performance-pathway-catalog-toggle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 16px;
+  border: 0;
+  border-bottom: 1px solid #e7e9ea;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.performance-pathway-catalog-toggle:hover .performance-pathway-catalog-heading-copy h3 {
+  color: var(--pd-blue);
+}
+
+.performance-pathway-catalog-heading-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.performance-pathway-catalog-heading-copy h3 {
+  margin: 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1;
+  text-transform: uppercase;
+  transition: color 0.15s ease;
+}
+
+.performance-pathway-catalog-stats {
+  margin: 8px 0 0;
+  color: #7a868c;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.performance-pathway-catalog-chevron {
+  flex: 0 0 auto;
+  color: #9aa1a5;
+  transition: transform 0.2s ease;
+}
+
+.performance-pathway-catalog-card.is-expanded .performance-pathway-catalog-chevron {
+  transform: rotate(180deg);
+}
+
+.performance-pathway-catalog-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e7e9ea;
+}
+
+.performance-pathway-logo-wrap {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 14px;
+  background: #f8fafb;
+  padding: 6px;
+}
+
+.performance-pathway-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.performance-pathway-catalog-header h3 {
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.performance-pathway-catalog-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+  border-top: 1px solid #e7e9ea;
+}
+
+.performance-pathway-level-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.performance-pathway-level-row {
+  overflow: hidden;
+  border: 1px solid #e7e9ea;
+  border-radius: 14px;
+  background: #f8fafb;
+}
+
+.performance-pathway-level-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.performance-pathway-level-toggle:hover {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.performance-pathway-level-badge {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pd-navy);
+  color: white;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.performance-pathway-level-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.performance-pathway-level-copy strong {
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.performance-pathway-level-copy span {
+  color: #7a868c;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.performance-pathway-level-chevron {
+  flex: 0 0 auto;
+  color: #9aa1a5;
+  transition: transform 0.2s ease;
+}
+
+.performance-pathway-level-row.is-open .performance-pathway-level-chevron {
+  transform: rotate(180deg);
+}
+
+.performance-pathway-level-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px 16px 64px;
+}
+
+.performance-pathway-level-projects ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.performance-pathway-level-projects li {
+  position: relative;
+  padding-left: 14px;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.performance-pathway-level-projects li::before {
+  position: absolute;
+  top: 0.55em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--pd-gold);
+  content: '';
+}
+
+.performance-pathway-level-elective-note {
+  margin: 0;
+  color: #7a868c;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.performance-pathway-availability {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.performance-pathway-availability.is-current {
+  background: rgba(55, 190, 103, 0.14);
+  color: #1f8a4d;
+}
+
+.performance-pathway-availability.is-legacy {
+  background: rgba(120, 19, 39, 0.08);
+  color: var(--pd-maroon);
+}
+
+.performance-pathway-catalog-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+  align-items: start;
+}
+
+.performance-pathway-catalog-summary {
+  margin: 0;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.performance-pathway-catalog-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: clamp(20px, 3vw, 32px);
+  border-left: 1px solid #e7e9ea;
+}
+
+.performance-pathway-competencies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.performance-pathway-competencies li {
+  border: 1px solid #e7e9ea;
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #f8fafb;
+  color: var(--pd-navy);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.performance-pathway-catalog-meta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pd-blue);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.performance-pathway-catalog-meta a:hover {
+  text-decoration: underline;
+}
+
+.performance-pathways-progress-heading {
+  margin-top: 36px;
+  padding-top: 8px;
+  border-top: 1px solid #e7e9ea;
+}
+
+.performance-pathways-progress-heading h3 {
+  margin: 4px 0 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.performance-pathways-progress-heading p {
+  margin: 8px 0 0;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Meeting roles page */
+.performance-meeting-roles-hero {
+  align-items: center;
+}
+
+.performance-meeting-roles-hero .performance-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.performance-meeting-roles-hero .performance-hero-score {
+  align-items: flex-end;
+}
+
+.performance-meeting-roles-hero .performance-hero-score > div {
+  min-width: 88px;
+}
+
+.performance-meeting-roles-intro,
+.performance-meeting-roles-points-card {
+  margin-top: 28px;
+  padding: clamp(22px, 2.5vw, 30px);
+}
+
+.performance-meeting-roles-intro > p,
+.performance-meeting-roles-points-card > p {
+  margin: 14px 0 0;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.performance-meeting-roles-handbook-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: var(--pd-blue);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.performance-meeting-roles-handbook-link:hover {
+  text-decoration: underline;
+}
+
+.performance-meeting-roles-points-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.performance-meeting-roles-points-item {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #e7e9ea;
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: #f8fafb;
+}
+
+.performance-meeting-roles-points-item > span {
+  min-width: 0;
+  flex: 1 1 auto;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.performance-meeting-roles-points-item .performance-meeting-role-points {
+  flex: 0 0 auto;
+}
+
+.performance-meeting-roles-points-item .performance-meeting-role-points strong {
+  font-size: 1.65rem;
+}
+
+.performance-meeting-roles-points-item .performance-meeting-role-points span {
+  font-size: 0.85rem;
+}
+
+.performance-meeting-roles-points-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  border: 0;
+  background: none;
+  color: var(--pd-blue);
+  cursor: pointer;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.performance-meeting-roles-grid {
+  margin-top: 28px;
+}
+
+.performance-meeting-roles-heading {
+  margin-bottom: 18px;
+}
+
+.performance-meeting-roles-heading h3 {
+  margin: 4px 0 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.performance-meeting-roles-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.performance-meeting-role-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(20px, 2.5vw, 28px);
+}
+
+.performance-meeting-role-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e7e9ea;
+}
+
+.performance-meeting-role-header h3 {
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  color: var(--pd-navy);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.performance-meeting-role-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+  align-items: start;
+}
+
+.performance-meeting-role-resources {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: clamp(20px, 3vw, 32px);
+  border-left: 1px solid #e7e9ea;
+}
+
+.performance-meeting-role-resources ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.performance-meeting-role-resources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pd-blue);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.performance-meeting-role-resources a:hover {
+  text-decoration: underline;
+}
+
+.performance-meeting-role-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(0, 65, 101, 0.08);
+  color: var(--pd-blue);
+}
+
+.performance-meeting-role-points {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.performance-meeting-role-points strong,
+.performance-meeting-role-points span {
+  display: inline;
+}
+
+.performance-meeting-role-points strong {
+  color: var(--pd-blue);
+  font-family: 'GothamCondensed-Bold', sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.performance-meeting-role-points span {
+  color: #9aa1a5;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: lowercase;
+}
+
+.performance-meeting-role-points.is-note {
+  max-width: none;
+}
+
+.performance-meeting-role-points.is-note span {
+  color: var(--pd-blue);
+  font-size: 0.9rem;
+  line-height: 1.2;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.performance-meeting-role-description {
+  margin: 0;
+  color: #5f6b73;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.performance-meeting-role-section-title {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--pd-maroon);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .performance-members-card {
@@ -1786,6 +2755,78 @@
   .performance-activity-card {
     grid-column: auto;
   }
+
+  .performance-pathways-grid .performance-progress-card,
+  .performance-pathways-grid .performance-pathways-points-card {
+    grid-column: auto;
+  }
+
+  .performance-pathways-levels-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-pathways-catalog-heading-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .performance-pathways-catalog-heading h3 {
+    white-space: normal;
+  }
+
+  .performance-pathways-catalog-stats {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .performance-pathways-catalog-stats li {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .performance-pathway-catalog-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .performance-pathway-catalog-meta {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: 0;
+    border-top: 1px solid #e7e9ea;
+  }
+
+  .performance-pathway-level-projects {
+    padding-left: 16px;
+  }
+
+  .performance-pathways-points-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-meeting-roles-cards {
+    gap: 16px;
+  }
+
+  .performance-meeting-role-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .performance-meeting-role-resources {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: 0;
+    border-top: 1px solid #e7e9ea;
+  }
+
+  .performance-meeting-roles-points-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .performance-pathways-activity {
+    padding: 23px 20px;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1843,6 +2884,7 @@
   .performance-badges-heading > div:first-child > span,
   .performance-badges-count span,
   .performance-badges-footer button,
+  .performance-badges-footer a,
   .performance-activity-item strong,
   .performance-activity-item div span,
   .performance-members-heading p,
