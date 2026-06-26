@@ -10,6 +10,7 @@ import { useDashboardData } from '../../hooks/useDashboardData';
 import { useMemberProfile } from '../../hooks/useMemberProfile';
 import { getMemberBadges } from '../../utils/badgeLogic';
 import { getLeaderboardDisplayMax } from '../../utils/leaderboard';
+import { getMemberPaymentSummary } from '../../data/memberPayments';
 import type { MemberPortalOutletContext } from './MemberPortalLayout';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
@@ -55,7 +56,7 @@ function groupBadges<T>(badges: T[]) {
 export default function PerformanceDashboardPage() {
   const { programKey } = useOutletContext<MemberPortalOutletContext>();
   const { members: clubMembers } = useDashboardData(programKey);
-  const { displayName, membershipNumber } = useMemberProfile();
+  const { displayName, email, membershipNumber } = useMemberProfile();
 
   // The signed-in member's row in the selected programme sheet. Membership
   // number is the canonical key: match on it first, then fall back to a name
@@ -125,6 +126,7 @@ export default function PerformanceDashboardPage() {
   const [hasAnimatedLeaderboard, setHasAnimatedLeaderboard] = useState(false);
   const badgeCloseTimeoutRef = useRef<number | null>(null);
   const leaderboardCardRef = useRef<HTMLElement | null>(null);
+  const paymentSummary = useMemo(() => getMemberPaymentSummary(email), [email]);
   const topPerformers = useMemo(() => {
     return [...clubMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
   }, [clubMembers]);
@@ -338,10 +340,25 @@ export default function PerformanceDashboardPage() {
         <article className="performance-card performance-fees-card">
           <span className="performance-eyebrow">Monthly Fee Dues</span>
           <p>Paid Through</p>
-          <h3>June 2026</h3>
+          {paymentSummary ? (
+            <h3>{paymentSummary.paidThrough}</h3>
+          ) : (
+            <span className="performance-fees-unavailable performance-fees-paid-through-empty">
+              Payment data not availble
+            </span>
+          )}
           <div className="performance-fees-details">
-            <div><span>Next Billing</span><strong>Jul 1, 2026</strong></div>
-            <div><span>Amount</span><strong>LKR 500</strong></div>
+            <div>
+              <span>Next Billing</span>
+              {paymentSummary ? (
+                <strong>{paymentSummary.nextBilling}</strong>
+              ) : (
+                <strong className="performance-fees-unavailable performance-fees-detail-empty">
+                  Payment data not availble
+                </strong>
+              )}
+            </div>
+            <div><span>Amount</span><strong>{paymentSummary?.amountLabel ?? 'LKR 500'}</strong></div>
           </div>
           <button type="button">Open Payment Portal</button>
         </article>

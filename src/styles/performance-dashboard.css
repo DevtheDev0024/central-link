@@ -1099,6 +1099,32 @@
   line-height: 0.95;
 }
 
+.performance-fees-unavailable {
+  color: rgba(255, 255, 255, 0.58);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.performance-fees-paid-through-empty {
+  display: flex;
+  min-height: 2.66rem;
+  align-items: center;
+}
+
+.performance-fees-details strong.performance-fees-detail-empty {
+  display: flex;
+  min-height: 1.75rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.58);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-style: italic;
+  line-height: 1.25;
+}
+
 .performance-fees-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
