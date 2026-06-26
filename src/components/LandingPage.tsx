@@ -1,19 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import PublicSiteNav from './PublicSiteNav';
 import ContactSection from './ContactSection';
 import '../styles/landing.css';
 import '../styles/contact.css';
-
-type DashboardSource = {
-  label: string;
-  title: string;
-};
-
-type LandingPageProps<DashboardKey extends string> = {
-  dashboardOptions: Array<[DashboardKey, DashboardSource]>;
-};
 
 const ribbonImages = [
   { src: '/pictures/492487826_1290803413046383_2498529566007376313_n.jpg', position: 'center center' },
@@ -41,10 +31,7 @@ const shuffleImages = <ImageType,>(images: ImageType[]) => {
   return shuffledImages;
 };
 
-export default function LandingPage<DashboardKey extends string>({
-  dashboardOptions,
-}: LandingPageProps<DashboardKey>) {
-  const navigate = useNavigate();
+export default function LandingPage() {
   const { hash } = useLocation();
   const landingPageRef = useRef<HTMLDivElement>(null);
   const [randomizedRibbonImages] = useState(() => shuffleImages(ribbonImages));
@@ -186,34 +173,6 @@ export default function LandingPage<DashboardKey extends string>({
           </div>
         </section>
 
-        <section className="landing-dashboard-panel animate-fade-rise-delay-2" aria-label="Dashboard selection">
-          <div className="landing-panel-heading">
-            <h2>Select Dashboard Year</h2>
-            <p>Choose a programme year to view member progress, achievements, and club activity.</p>
-          </div>
-
-          <div className="landing-year-list">
-            {dashboardOptions.map(([dashboardKey, source], index) => (
-              <button
-                key={dashboardKey}
-                type="button"
-                onClick={() => navigate(`/club/${dashboardKey}`)}
-                className="landing-year-button"
-              >
-                <span className="landing-year-number">0{index + 1}</span>
-                <span className="landing-year-copy">
-                  <span className="landing-year-label">Programme year</span>
-                  <strong>{source.label}</strong>
-                  <span>{source.title}</span>
-                </span>
-                <span className="landing-year-arrow" aria-hidden="true">
-                  <ArrowUpRight size={20} />
-                </span>
-              </button>
-            ))}
-          </div>
-
-        </section>
       </main>
 
       <section id="gallery" className="landing-ribbon" aria-label="Central Link Toastmasters moments">

@@ -11,14 +11,9 @@ import MemberPortalLayout from './components/memberPortal/MemberPortalLayout';
 import PathwaysPage from './components/memberPortal/PathwaysPage';
 import PerformanceDashboardPage from './components/memberPortal/PerformanceDashboardPage';
 import { memberPortalNav } from './components/memberPortal/navItems';
-import { DASHBOARD_SOURCES, type DashboardYearKey } from './config/dashboardYears';
 import AdminPanelPage from './pages/AdminPanelPage';
 import ClubDashboardPage from './pages/ClubDashboardPage';
 import LoginPage from './pages/LoginPage';
-
-const dashboardOptions = Object.entries(DASHBOARD_SOURCES) as Array<
-  [DashboardYearKey, (typeof DASHBOARD_SOURCES)[DashboardYearKey]]
->;
 
 function LegacyMemberPortalRedirect() {
   const { pathname } = useLocation();
@@ -31,7 +26,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage dashboardOptions={dashboardOptions} />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/contact" element={<Navigate to={{ pathname: '/', hash: '#contact' }} replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/club/:yearKey" element={<ClubDashboardPage />} />
