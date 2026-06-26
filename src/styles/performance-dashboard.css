@@ -1194,6 +1194,20 @@
   margin-top: 0;
 }
 
+.performance-activity-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 204px;
+  margin: 0;
+  color: #9aa1a5;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .performance-activity-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

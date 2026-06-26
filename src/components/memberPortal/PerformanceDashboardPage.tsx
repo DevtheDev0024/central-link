@@ -15,11 +15,18 @@ import BadgeGridSection from '../dashboard/BadgeGridSection';
 import MemberPerformanceSection from '../dashboard/MemberPerformanceSection';
 import PointsModal from '../dashboard/PointsModal';
 
-const activities = [
-  { title: 'Completed General Evaluator Role', detail: 'June 20 • ESU TMC', points: '+18 pts' },
-  { title: 'Delivered “Guilty, Your Honor”', detail: 'June 13 • Central Link TMC', points: '+35 pts' },
-  { title: 'Visit Another Club', detail: 'June 6 • Dowels TMC', points: '+10 pts' },
-];
+type MemberActivity = {
+  title: string;
+  // Date and club, e.g. "June 20 • ESU TMC".
+  detail: string;
+  // Points gained from the activity, e.g. "+18 pts".
+  points: string;
+};
+
+// No activity data source exists yet (no admin/entry point to record them).
+// The future activity system will populate this per member; kept typed so the
+// card below renders real items and their points as soon as data is available.
+const recentActivities: MemberActivity[] = [];
 
 function groupBadges<T>(badges: T[]) {
   const rowCount = Math.ceil(badges.length / 4);
@@ -294,12 +301,16 @@ export default function PerformanceDashboardPage() {
             <h3>Recent Activity</h3>
           </div>
           <div className="performance-activity-list">
-            {activities.map(({ title, detail, points }) => (
-              <div key={title} className="performance-activity-item">
-                <div><strong>{title}</strong><span>{detail}</span></div>
-                <b>{points}</b>
-              </div>
-            ))}
+            {recentActivities.length > 0 ? (
+              recentActivities.map(({ title, detail, points }) => (
+                <div key={title} className="performance-activity-item">
+                  <div><strong>{title}</strong><span>{detail}</span></div>
+                  <b>{points}</b>
+                </div>
+              ))
+            ) : (
+              <p className="performance-activity-empty">No recent activity</p>
+            )}
           </div>
         </article>
 
