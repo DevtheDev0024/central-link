@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Bell, ChevronRight, Menu, Search, Shield } from 'lucide-react';
+import { Bell, ChevronRight, Menu, Search } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AccountFooterPanel from '../auth/AccountFooterPanel';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
@@ -177,7 +177,7 @@ export default function MemberPortalLayout() {
                 <div className="performance-profile-menu" role="menu">
                   <div className="performance-profile-menu-header">
                     <strong>{displayName}</strong>
-                    <span>{roleLabel}</span>
+                    <span className="performance-profile-menu-role">{roleLabel}</span>
                   </div>
 
                   {isAdmin ? (
@@ -188,8 +188,7 @@ export default function MemberPortalLayout() {
                         role="menuitem"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
-                        <Shield size={15} aria-hidden="true" />
-                        Admin Panel
+                        Admin Console
                       </Link>
                     </div>
                   ) : null}
