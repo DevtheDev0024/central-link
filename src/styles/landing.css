@@ -65,7 +65,6 @@
   right: 0;
   left: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, calc(0.18 * (1 - var(--landing-nav-progress))));
   background: rgba(0, 65, 101, var(--landing-nav-progress));
   box-shadow: 0 4px 24px rgba(0, 0, 0, calc(0.18 * var(--landing-nav-progress)));
 }
@@ -119,10 +118,10 @@
   position: relative;
   padding-bottom: 0.2rem;
   color: #fff;
-  font-family: var(--landing-body);
-  font-size: 0.8125rem;
-  font-weight: 300;
-  letter-spacing: 0.04em;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0;
   line-height: 1rem;
   text-decoration: none;
   text-shadow: 0 2px 12px rgba(0, 0, 0, calc(0.35 * (1 - var(--landing-nav-progress))));
@@ -150,25 +149,32 @@
 }
 
 .landing-nav-signin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  border: 1px solid #fff;
-  padding: 0.4rem 1rem;
+  min-height: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 0 1.1rem;
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
   text-decoration: none;
-  font-family: var(--landing-body);
-  font-size: 0.6875rem;
-  font-weight: 300;
-  letter-spacing: 0.14em;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0;
   line-height: 1rem;
   text-decoration: none;
   text-shadow: 0 2px 12px rgba(0, 0, 0, calc(0.35 * (1 - var(--landing-nav-progress))));
-  text-transform: uppercase;
-  transition: background-color 200ms ease, color 200ms ease;
+  text-transform: none;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
 }
 
 .landing-nav-signin:hover {
-  background: #fff;
-  color: var(--landing-nav-blue);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
 .landing-nav-signin:focus-visible {
