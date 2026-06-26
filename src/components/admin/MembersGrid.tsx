@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ChevronDown,
-  Download,
   Pencil,
   Plus,
   Power,
@@ -18,7 +17,6 @@ import type { MemberAccount, MemberStatus } from '../../types/memberAccount';
 import { db } from '../../lib/firebase';
 
 type StatusFilter = 'all' | MemberStatus;
-type ViewMode = 'table' | 'roster';
 
 function mapMemberDocument(id: string, data: Record<string, unknown>): MemberAccount {
   const membershipNumber = data.membershipNumber
@@ -102,7 +100,6 @@ export default function MembersGrid() {
   const [statusUpdatingUid, setStatusUpdatingUid] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [viewMode, setViewMode] = useState<ViewMode>('roster');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<MemberAccount | null>(null);
   const [statusConfirmMember, setStatusConfirmMember] = useState<MemberAccount | null>(null);
@@ -212,43 +209,24 @@ export default function MembersGrid() {
     <>
       <section className="admin-user-management">
         <div className="admin-page-header">
-          <div>
-            <p className="admin-page-eyebrow">Management</p>
-            <h1>User Management</h1>
-          </div>
-
-          <div className="admin-view-toggle" role="group" aria-label="View mode">
-            <button
-              type="button"
-              className={viewMode === 'table' ? 'is-active' : undefined}
-              onClick={() => setViewMode('table')}
-            >
-              Table
-            </button>
-            <button
-              type="button"
-              className={viewMode === 'roster' ? 'is-active' : undefined}
-              onClick={() => setViewMode('roster')}
-            >
-              Roster
-            </button>
-          </div>
+          <h1>User Management</h1>
         </div>
 
         <div className="admin-control-bar">
           <div className="admin-filter-group" role="group" aria-label="Filter members">
             {([
-              ['all', `All (${counts.all})`],
-              ['active', `Active (${counts.active})`],
-              ['inactive', `Inactive (${counts.inactive})`],
-            ] as const).map(([value, label]) => (
+              ['all', 'All', counts.all],
+              ['active', 'Active', counts.active],
+              ['inactive', 'Inactive', counts.inactive],
+            ] as const).map(([value, label, count]) => (
               <button
                 key={value}
                 type="button"
                 className={statusFilter === value ? 'is-active' : undefined}
                 onClick={() => setStatusFilter(value)}
               >
-                {label}
+                <span>{label}</span>
+                <strong>{count}</strong>
               </button>
             ))}
           </div>
@@ -257,17 +235,13 @@ export default function MembersGrid() {
             <Search size={18} aria-hidden="true" />
             <input
               type="search"
-              placeholder="Search name or email..."
+              placeholder="Search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
           </label>
 
           <div className="admin-control-actions">
-            <button type="button" className="admin-btn admin-btn-outline">
-              <Download size={16} aria-hidden="true" />
-              Export
-            </button>
             <button type="button" className="admin-btn admin-btn-primary" onClick={() => setIsCreateModalOpen(true)}>
               <Plus size={16} aria-hidden="true" />
               Add User
@@ -283,7 +257,7 @@ export default function MembersGrid() {
           <p className="admin-empty-state">No members match your current filters.</p>
         ) : null}
 
-        {!loading && !error && filteredMembers.length > 0 && viewMode === 'roster' ? (
+        {!loading && !error && filteredMembers.length > 0 ? (
           <ul className="admin-roster-list">
             {filteredMembers.map((member) => {
               const roleLabel = getRoleLabel(member);
@@ -308,20 +282,16 @@ export default function MembersGrid() {
                       </div>
 
                       <div className="admin-roster-identity">
-                        <div className="admin-roster-name-row">
-                          <strong>{member.displayName || 'Unnamed member'}</strong>
-                          <span className={`admin-status-badge ${isInactive ? 'is-inactive' : 'is-active'}`}>
-                            <span aria-hidden="true">●</span>
-                            {member.status}
-                          </span>
-                        </div>
-
-                        <div className="admin-roster-subline">
-                          <span className="admin-roster-email">{member.email}</span>
-                          <span className="admin-roster-dot" aria-hidden="true" />
-                          <span className={`admin-role-badge ${getRoleTone(roleLabel)}`}>{roleLabel}</span>
-                        </div>
+                        <strong>{member.displayName || 'Unnamed member'}</strong>
+                        <span className="admin-roster-email">{member.email}</span>
+                        <span className={`admin-roster-status ${isInactive ? 'is-inactive' : 'is-active'}`}>
+                          {isInactive ? 'Inactive' : 'Active'}
+                        </span>
                       </div>
+                    </div>
+
+                    <div className="admin-roster-role-column">
+                      <span className={`admin-role-badge ${getRoleTone(roleLabel)}`}>{roleLabel}</span>
                     </div>
 
                     <div className="admin-roster-meta">
@@ -394,108 +364,6 @@ export default function MembersGrid() {
               );
             })}
           </ul>
-        ) : null}
-
-        {!loading && !error && filteredMembers.length > 0 && viewMode === 'table' ? (
-          <div className="admin-table-wrap">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Member</th>
-                  <th>Membership #</th>
-                  <th>Emergency contact</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Last active</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMembers.map((member) => {
-                  const roleLabel = getRoleLabel(member);
-                  const isInactive = member.status === 'inactive';
-                  const isUpdating = statusUpdatingUid === member.uid;
-
-                  return (
-                    <tr key={member.uid} className={isInactive ? 'is-inactive' : undefined}>
-                      <td>
-                        <div className="admin-table-member">
-                          <strong>{member.displayName || 'Unnamed member'}</strong>
-                          <span>{member.email}</span>
-                        </div>
-                      </td>
-                      <td>
-                        {member.membershipNumber ? (
-                          <span className="admin-table-membership">#{member.membershipNumber}</span>
-                        ) : (
-                          <span className="admin-table-muted">—</span>
-                        )}
-                      </td>
-                      <td>
-                        {member.emergencyContactName || member.emergencyContactNumber ? (
-                          <div className="admin-table-contact">
-                            <strong>{member.emergencyContactName ?? '—'}</strong>
-                            {member.emergencyContactNumber ? (
-                              <span>{member.emergencyContactNumber}</span>
-                            ) : null}
-                          </div>
-                        ) : (
-                          <span className="admin-table-muted">—</span>
-                        )}
-                      </td>
-                      <td>
-                        <span className={`admin-role-badge ${getRoleTone(roleLabel)}`}>{roleLabel}</span>
-                      </td>
-                      <td>
-                        <span className={`admin-status-badge ${isInactive ? 'is-inactive' : 'is-active'}`}>
-                          <span aria-hidden="true">●</span>
-                          {member.status}
-                        </span>
-                      </td>
-                      <td>
-                        <span className="admin-table-last-active">
-                          {formatLastActive(member.updatedAt ?? member.createdAt)}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="admin-table-actions">
-                          <button
-                            type="button"
-                            className="admin-btn admin-btn-icon"
-                            aria-label={`Edit ${member.displayName || member.email}`}
-                            onClick={() => setEditingMember(member)}
-                          >
-                            <Pencil size={16} aria-hidden="true" />
-                          </button>
-                          <button
-                            type="button"
-                            className={`admin-btn admin-btn-icon ${
-                              isInactive ? 'admin-btn-success-soft' : 'admin-btn-danger-soft'
-                            }`}
-                            disabled={isUpdating}
-                            aria-label={
-                              isUpdating
-                                ? 'Updating member status'
-                                : isInactive
-                                  ? `Reactivate ${member.displayName || member.email}`
-                                  : `Deactivate ${member.displayName || member.email}`
-                            }
-                            onClick={() => openStatusConfirm(member)}
-                          >
-                            {isInactive ? (
-                              <RotateCcw size={16} aria-hidden="true" />
-                            ) : (
-                              <Power size={16} aria-hidden="true" />
-                            )}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
         ) : null}
       </section>
 

@@ -1,80 +1,42 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Check, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { Link, useOutletContext } from 'react-router-dom';
 import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
-import { getCurrentLevel, getOverallPercent, PATHWAY_NAME, pathwayLevels } from '../../data/pathwayMockData';
+import { BADGE_DEFINITIONS } from '../../data/badgeDefinitions';
 import type { BadgeDefinition } from '../../types/badges';
 import type { PointsModalTab } from '../../types/badges';
 import type { Member } from '../../types/member';
+import { useDashboardData } from '../../hooks/useDashboardData';
+import { useMemberProfile } from '../../hooks/useMemberProfile';
+import { getMemberBadges } from '../../utils/badgeLogic';
+import { getLeaderboardDisplayMax } from '../../utils/leaderboard';
+import { getMemberPaymentSummary } from '../../data/memberPayments';
+import type { MemberPortalOutletContext } from './MemberPortalLayout';
+import { MEMBER_PORTAL_BASE } from './navItems';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
 import MemberPerformanceSection from '../dashboard/MemberPerformanceSection';
 import PointsModal from '../dashboard/PointsModal';
 
-const metrics = [
-  { label: 'Speeches Delivered', value: '8', note: '2 this term' },
-  { label: 'Roles Taken', value: '14', note: '+5 this term' },
-  { label: 'Meetings Attended', value: '10', note: '92% Attendance' },
-  { label: 'Member Points', value: '312', note: 'Rank #2 in Club' },
-];
+type MemberActivity = {
+  title: string;
+  // Date and club, e.g. "June 20 • ESU TMC".
+  detail: string;
+  // Points gained from the activity, e.g. "+18 pts".
+  points: string;
+};
 
-const activities = [
-  { title: 'Completed General Evaluator Role', detail: 'June 20 • ESU TMC', points: '+18 pts' },
-  { title: 'Delivered “Guilty, Your Honor”', detail: 'June 13 • Central Link TMC', points: '+35 pts' },
-  { title: 'Visit Another Club', detail: 'June 6 • Dowels TMC', points: '+10 pts' },
-];
+// No activity data source exists yet (no admin/entry point to record them).
+// The future activity system will populate this per member; kept typed so the
+// card below renders real items and their points as soon as data is available.
+const recentActivities: MemberActivity[] = [];
 
-// Placeholder set — earned badges will be fetched/routed per member later.
-const earnedBadges = [
-  { name: 'Pathways Achiever', image: '/badges/Pathways-Achiever.png' },
-  { name: 'Contest Supporter', image: '/badges/Contest-Supporter.png' },
-  { name: 'Leadership Contributor', image: '/badges/Leadership-Contributor.png' },
-  { name: 'Learning Enthusiast', image: '/badges/Learning-Enthusiast.png' },
-  { name: 'Evaluation Champion', image: '/badges/Evaluation-Champion.png' },
-  { name: 'Contest Star', image: '/badges/Contest-Star.png' },
-  { name: 'Meeting Star', image: '/badges/Meeting-Star.png' },
-];
-
-const pathwayProjects = getCurrentLevel(pathwayLevels).projects;
-const pathwayLevelStepper = pathwayLevels.map(({ label, status }) => ({ level: label, status }));
-
-const performanceMembers: Member[] = [
-  ['Thebuk Rabathialke', 40, 25, 30, 65, 15, 0, 0, 123],
-  ['Dulain Gunawardhana', 35, 30, 25, 50, 20, 10, 5, 118],
-  ['Sachini Perera', 30, 28, 20, 45, 15, 10, 10, 112],
-  ['Nimesh Fernando', 25, 24, 28, 40, 20, 5, 10, 108],
-  ['Amaya Jayasinghe', 30, 20, 25, 35, 15, 10, 5, 104],
-  ['Kavindu Silva', 20, 25, 20, 35, 10, 15, 10, 98],
-  ['Tharushi Wickramasinghe', 25, 20, 18, 30, 15, 10, 5, 94],
-  ['Ravindu Senanayake', 20, 18, 20, 25, 15, 10, 5, 88],
-  ['Sanduni Wijesinghe', 18, 20, 15, 25, 10, 8, 5, 84],
-  ['Dinuka Amarasinghe', 20, 16, 18, 20, 10, 10, 5, 81],
-  ['Hasini de Silva', 16, 18, 14, 22, 10, 8, 6, 78],
-  ['Pasindu Jayawardena', 15, 16, 15, 20, 8, 10, 5, 74],
-  ['Shenali Fernando', 18, 15, 12, 18, 10, 6, 4, 71],
-  ['Akila Perera', 14, 15, 14, 16, 8, 7, 5, 68],
-  ['Mihiri Gunasekara', 15, 12, 13, 15, 8, 6, 5, 64],
-  ['Janith Bandara', 12, 14, 10, 14, 7, 5, 4, 59],
-].map(([name, levels, projects, awards, contests, training, education, mentoring, total]) => ({
-  name: name as string,
-  levelCompletion: levels as number,
-  projectCompletion: projects as number,
-  meetingAwards: awards as number,
-  contestExcellence: contests as number,
-  evaluationContribution: 0,
-  trainingPrograms: training as number,
-  educationalSessions: education as number,
-  mentoringAssignments: mentoring as number,
-  leadershipRoles: 0,
-  clubEvents: 0,
-  clubContestContribution: 0,
-  visitingToastmaster: 0,
-  meetingRolesPoints: 0,
-  totalPoints: total as number,
-  aiScore: 0,
-  ajScore: total as number,
-  meetingRoles: [],
-}));
+// Membership number is the shared key between Firestore accounts and the
+// spreadsheet. Normalise both sides (strip whitespace, upper-case) so formats
+// like "PN-67632735" / "pn-67632735" compare equal.
+function normalizeMembershipNumber(value: string | undefined | null): string {
+  return (value ?? '').replace(/\s+/g, '').toUpperCase();
+}
 
 function groupBadges<T>(badges: T[]) {
   const rowCount = Math.ceil(badges.length / 4);
@@ -93,6 +55,50 @@ function groupBadges<T>(badges: T[]) {
 }
 
 export default function PerformanceDashboardPage() {
+  const { programKey } = useOutletContext<MemberPortalOutletContext>();
+  const { members: clubMembers } = useDashboardData(programKey);
+  const { displayName, email, membershipNumber } = useMemberProfile();
+
+  // The signed-in member's row in the selected programme sheet. Membership
+  // number is the canonical key: match on it first, then fall back to a name
+  // match so members without a membership number on either side still resolve
+  // (the spreadsheet ID columns are being populated incrementally).
+  const currentMember = useMemo(() => {
+    const targetId = normalizeMembershipNumber(membershipNumber);
+    if (targetId) {
+      const byId = clubMembers.find(
+        (member) => normalizeMembershipNumber(member.membershipNumber) === targetId,
+      );
+      if (byId) return byId;
+    }
+
+    const targetName = displayName.trim().toLowerCase();
+    if (!targetName) return null;
+    return clubMembers.find((member) => member.name.trim().toLowerCase() === targetName) ?? null;
+  }, [clubMembers, membershipNumber, displayName]);
+
+  // Per-member cards fall back to the UI-development placeholders until a
+  // matching member exists in the sheet. Fields without a sheet column
+  // (speeches, meetings attended, week streak, pathway, level) stay as stubs.
+  const heroName = displayName.trim() || 'Member';
+  const heroPoints = currentMember ? currentMember.totalPoints.toLocaleString() : '312';
+  const metrics = [
+    { label: 'Speeches Delivered', value: '-', note: '-' },
+    { label: 'Roles Taken', value: '-', note: '-' },
+    { label: 'Meetings Attended', value: '-', note: '-' },
+    { label: 'Member Points', value: '-', note: '-' },
+  ];
+
+  // Earned badges are derived from the member's points via the same benchmark
+  // rules the old dashboard uses (getMemberBadges -> getScore >= benchmark).
+  const earnedBadges = useMemo(
+    () =>
+      (currentMember ? getMemberBadges(currentMember).earned : []).map((badge) => ({
+        name: badge.name,
+        image: badge.imageSrc,
+      })),
+    [currentMember],
+  );
   const badgeRows = groupBadges(earnedBadges);
   const [selectedBadge, setSelectedBadge] = useState<BadgeDefinition | null>(null);
   const [isBadgeDetailClosing, setIsBadgeDetailClosing] = useState(false);
@@ -102,9 +108,20 @@ export default function PerformanceDashboardPage() {
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [pointsModalTab, setPointsModalTab] = useState<PointsModalTab>('scoring');
   const [selectedCalculatorBadgeId, setSelectedCalculatorBadgeId] = useState(BADGE_CALCULATOR_RULES[0].id);
+  const [leaderboardAnimationProgress, setLeaderboardAnimationProgress] = useState(0);
+  const [hasAnimatedLeaderboard, setHasAnimatedLeaderboard] = useState(false);
   const badgeCloseTimeoutRef = useRef<number | null>(null);
+  const leaderboardCardRef = useRef<HTMLElement | null>(null);
+  const paymentSummary = useMemo(() => getMemberPaymentSummary(email), [email]);
+  const topPerformers = useMemo(() => {
+    return [...clubMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
+  }, [clubMembers]);
+  const leaderboardDisplayMax = useMemo(
+    () => getLeaderboardDisplayMax(topPerformers.map((member) => member.ajScore)),
+    [topPerformers],
+  );
 
-  const visibleMembers = performanceMembers
+  const visibleMembers = clubMembers
     .filter((member) => member.name.toLowerCase().includes(memberSearchTerm.toLowerCase()))
     .sort((first, second) => {
       const firstValue = first[memberSortField];
@@ -178,6 +195,67 @@ export default function PerformanceDashboardPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const leaderboardCard = leaderboardCardRef.current;
+    if (!leaderboardCard || hasAnimatedLeaderboard) return;
+
+    let animationFrame = 0;
+    let observer: IntersectionObserver | null = null;
+
+    const animateLeaderboard = () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduceMotion) {
+        setLeaderboardAnimationProgress(1);
+        setHasAnimatedLeaderboard(true);
+        return;
+      }
+
+      const duration = 950;
+      const startTime = performance.now();
+
+      const tick = (time: number) => {
+        const progress = Math.min((time - startTime) / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+        setLeaderboardAnimationProgress(easedProgress);
+
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(tick);
+          return;
+        }
+
+        setHasAnimatedLeaderboard(true);
+      };
+
+      setLeaderboardAnimationProgress(0);
+      animationFrame = requestAnimationFrame(tick);
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      animateLeaderboard();
+      return () => cancelAnimationFrame(animationFrame);
+    }
+
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+
+        observer?.disconnect();
+        observer = null;
+        animateLeaderboard();
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(leaderboardCard);
+
+    return () => {
+      observer?.disconnect();
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [hasAnimatedLeaderboard]);
+
   return (
     <>
       <section className="performance-hero">
@@ -185,24 +263,27 @@ export default function PerformanceDashboardPage() {
           <span className="performance-welcome">Welcome Back!</span>
           <div className="performance-hero-headline">
             <h2>
-              <span>Dulain</span>
-              <span>Gunawardhana</span>
-            </h2>
-            <div className="performance-hero-badges" aria-label="Earned badges">
-              {earnedBadges.slice(0, 3).map((badge) => (
-                <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
+              {heroName.split(/\s+/).map((part, index) => (
+                <span key={`${part}-${index}`}>{part}</span>
               ))}
-            </div>
+            </h2>
+            {earnedBadges.length > 0 ? (
+              <div className="performance-hero-badges" aria-label="Earned badges">
+                {earnedBadges.slice(0, 3).map((badge) => (
+                  <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="performance-pathway-meta">
-            <span>Pathway: <strong>{PATHWAY_NAME}</strong></span>
-            <span>Level: <strong>{getCurrentLevel(pathwayLevels).level} of 5</strong></span>
+            <span>Pathway: <strong>Presentation Mastery</strong></span>
+            <span>Level: <strong>3 of 5</strong></span>
           </div>
         </div>
 
         <div className="performance-hero-score">
           <div>
-            <strong>312</strong>
+            <strong>{heroPoints}</strong>
             <span>Points</span>
           </div>
           <div>
@@ -223,91 +304,104 @@ export default function PerformanceDashboardPage() {
       </section>
 
       <section className="performance-grid">
-        <article className="performance-card performance-progress-card">
-          <div className="performance-card-heading">
-            <div>
-              <span className="performance-eyebrow">Pathways progress</span>
-              <h3>{PATHWAY_NAME}</h3>
-            </div>
-            <div className="performance-percent">
-              <strong>{getOverallPercent(pathwayLevels)}%</strong>
-              <span>Overall</span>
-            </div>
-          </div>
-
-          <div className="performance-levels">
-            {pathwayLevelStepper.map((item) => (
-              <div key={item.level} className={`performance-level is-${item.status}`}>
-                <span>{item.level}</span>
-                <i />
-              </div>
-            ))}
-          </div>
-
-          <div className="performance-projects">
-            <span className="performance-projects-title">Level {getCurrentLevel(pathwayLevels).level} Projects</span>
-            <ul className="performance-project-list">
-              {pathwayProjects.map((project) => (
-                <li key={project.name} className={project.done ? 'is-done' : 'is-pending'}>
-                  <span className="performance-project-mark">
-                    {project.done && <Check size={15} strokeWidth={3.5} />}
-                  </span>
-                  <span>{project.name}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="performance-badges-footer">
-            <Link to="/member/pathways">View Pathways <ChevronRight size={20} /></Link>
-          </div>
-        </article>
-
-        <article className="performance-card performance-fees-card">
-          <span className="performance-eyebrow">Monthly Fee Dues</span>
-          <p>Paid Through</p>
-          <h3>June 2026</h3>
-          <div className="performance-fees-details">
-            <div><span>Next Billing</span><strong>Jul 1, 2026</strong></div>
-            <div><span>Amount</span><strong>LKR 500</strong></div>
-          </div>
-          <button type="button">Open Payment Portal</button>
-        </article>
-
-        <article className="performance-card performance-badges-card">
-          <div className="performance-badges-heading">
-            <div>
-              <span>Dulain Gunawardhana</span>
-              <h3>Earned Badges</h3>
-            </div>
-            <div className="performance-badges-count">
-              <strong>7</strong>
-              <span>of 12</span>
-            </div>
-          </div>
-          <div className="performance-earned-badges" aria-label="Earned badges">
-            {badgeRows.map((row, rowIndex) => (
-              <div key={rowIndex} className="performance-earned-badges-row">
-                {row.map((badge) => (
-                  <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className="performance-badges-footer">
-            <button type="button">View All <ChevronRight size={20} /></button>
-          </div>
-        </article>
-
         <article className="performance-card performance-activity-card">
           <div className="performance-activity-heading">
             <span className="performance-eyebrow">Latest Updates</span>
             <h3>Recent Activity</h3>
           </div>
           <div className="performance-activity-list">
-            {activities.map(({ title, detail, points }) => (
-              <div key={title} className="performance-activity-item">
-                <div><strong>{title}</strong><span>{detail}</span></div>
-                <b>{points}</b>
+            {recentActivities.length > 0 ? (
+              recentActivities.map(({ title, detail, points }) => (
+                <div key={title} className="performance-activity-item">
+                  <div><strong>{title}</strong><span>{detail}</span></div>
+                  <b>{points}</b>
+                </div>
+              ))
+            ) : (
+              <p className="performance-activity-empty">No recent activity</p>
+            )}
+          </div>
+        </article>
+
+        <article className="performance-card performance-fees-card">
+          <span className="performance-eyebrow">Monthly Fee Dues</span>
+          <p>Paid Through</p>
+          {paymentSummary ? (
+            <h3>{paymentSummary.paidThrough}</h3>
+          ) : (
+            <span className="performance-fees-unavailable performance-fees-paid-through-empty">
+              Payment data not availble
+            </span>
+          )}
+          <div className="performance-fees-details">
+            <div>
+              <span>Next Billing</span>
+              {paymentSummary ? (
+                <strong>{paymentSummary.nextBilling}</strong>
+              ) : (
+                <strong className="performance-fees-unavailable performance-fees-detail-empty">
+                  Payment data not availble
+                </strong>
+              )}
+            </div>
+            <div><span>Amount</span><strong>{paymentSummary?.amountLabel ?? 'LKR 500'}</strong></div>
+          </div>
+          <Link to={`${MEMBER_PORTAL_BASE}/monthly-fee-portal`} className="performance-fees-action">
+            Open Payment Portal
+          </Link>
+        </article>
+
+        <article className="performance-card performance-badges-card">
+          <div className="performance-badges-heading">
+            <div>
+              <span>{heroName}</span>
+              <h3>Earned Badges</h3>
+            </div>
+            <div className="performance-badges-count">
+              <strong>{earnedBadges.length}</strong>
+              <span>of {BADGE_DEFINITIONS.length}</span>
+            </div>
+          </div>
+          <div className="performance-earned-badges" aria-label="Earned badges">
+            {earnedBadges.length > 0 ? (
+              badgeRows.map((row, rowIndex) => (
+                <div key={rowIndex} className="performance-earned-badges-row">
+                  {row.map((badge) => (
+                    <img key={badge.name} src={badge.image} alt={`${badge.name} badge`} title={badge.name} />
+                  ))}
+                </div>
+              ))
+            ) : (
+              <p className="performance-earned-badges-empty">No badges earned</p>
+            )}
+          </div>
+          <div className="performance-badges-footer">
+            <button type="button">View All <ChevronRight size={20} /></button>
+          </div>
+        </article>
+
+        <article ref={leaderboardCardRef} className="performance-card performance-leaderboard-card">
+          <div className="performance-leaderboard-heading">
+            <span className="performance-eyebrow">Leaderboard</span>
+            <h3>Top 5 Performers</h3>
+          </div>
+          <div className="performance-leaderboard-list">
+            {topPerformers.map((member, index) => (
+              <div key={member.name} className="performance-leaderboard-item">
+                <span className="performance-leaderboard-rank">{index + 1}</span>
+                <div className="performance-leaderboard-member">
+                  <strong>{member.name}</strong>
+                  <div className="performance-leaderboard-track">
+                    <span
+                      style={{
+                        '--leaderboard-width': `${(member.ajScore / leaderboardDisplayMax) * 100 * leaderboardAnimationProgress}%`,
+                      } as CSSProperties}
+                    >
+                      {Math.round(member.ajScore * leaderboardAnimationProgress).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <b>{member.ajScore}</b>
               </div>
             ))}
           </div>
@@ -321,6 +415,7 @@ export default function PerformanceDashboardPage() {
       <div className="performance-member-performance">
         <MemberPerformanceSection
           members={visibleMembers}
+          rankingMembers={clubMembers}
           searchTerm={memberSearchTerm}
           onSearchChange={setMemberSearchTerm}
           sortField={memberSortField}
@@ -329,7 +424,7 @@ export default function PerformanceDashboardPage() {
           onMemberSelect={() => undefined}
           onOpenPointsModal={openPointsModal}
           variant="performance-dashboard"
-          totalMemberCount={32}
+          totalMemberCount={clubMembers.length}
         />
       </div>
 

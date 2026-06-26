@@ -131,7 +131,7 @@
   align-items: center;
   gap: 10px;
   border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 8px;
+  border-radius: 24px;
   padding: 0 14px;
   background: rgba(255, 255, 255, 0.04);
   color: #fff;
@@ -285,6 +285,38 @@
   gap: 12px;
 }
 
+.performance-topbar-program {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  border-bottom: 1px solid #8c9aa2;
+  color: #004165;
+}
+
+.performance-topbar-program select {
+  width: auto;
+  max-width: 10rem;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  padding: 0 1.2rem 0.18rem 0;
+  background: transparent;
+  color: #004165;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.performance-topbar-program svg {
+  position: absolute;
+  right: 0;
+  color: #004165;
+  pointer-events: none;
+}
+
 .performance-search {
   display: flex;
   width: min(260px, 22vw);
@@ -342,6 +374,7 @@
   transition: background 160ms ease, color 160ms ease;
 }
 
+.performance-icon-button.is-open,
 .performance-icon-button:hover {
   background: rgba(0, 65, 101, 0.08);
   color: #004165;
@@ -389,25 +422,118 @@
   position: relative;
 }
 
+.performance-notification-menu-wrap {
+  position: relative;
+}
+
+.performance-notification-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 70;
+  width: min(22rem, calc(100vw - 2rem));
+  overflow: hidden;
+  border: 1px solid #dfe3e5;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 14px 35px rgba(16, 35, 56, 0.12);
+  color: #102338;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+}
+
+.performance-notification-menu-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 13px;
+  border-bottom: 1px solid #e4e6e8;
+}
+
+.performance-notification-menu-header strong {
+  display: block;
+  color: var(--pd-maroon);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.performance-notification-menu-body {
+  padding: 20px 16px;
+}
+
+.performance-notification-menu-empty {
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.performance-notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.performance-notification-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid #e7ecef;
+  border-radius: 16px;
+  padding: 14px;
+  background: #f9fbfc;
+}
+
+.performance-notification-item strong {
+  display: block;
+  color: #004165;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.performance-notification-item p {
+  margin-top: 4px;
+  color: #415262;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.performance-notification-item time {
+  flex: 0 0 auto;
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .performance-profile-menu {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
   z-index: 70;
-  width: min(18rem, calc(100vw - 2rem));
+  width: min(19rem, calc(100vw - 2rem));
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  border: 1px solid #dfe3e5;
+  border-radius: 24px;
   background: #fff;
-  box-shadow: 0 16px 40px rgba(16, 35, 56, 0.14);
+  box-shadow: 0 14px 35px rgba(16, 35, 56, 0.12);
+  color: #102338;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
 }
 
 .performance-profile-menu-header {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  gap: 1px;
+  padding: 16px 16px 13px;
+  border-bottom: 1px solid #e4e6e8;
 }
 
 .performance-profile-menu-header strong {
@@ -417,11 +543,13 @@
   font-weight: 600;
 }
 
-.performance-profile-menu-header span {
-  color: #667085;
+.performance-profile-menu-role {
+  color: #8c1d36;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .performance-profile-menu-email {
@@ -430,11 +558,56 @@
 }
 
 .performance-profile-menu-actions {
-  padding: 12px 16px 0;
+  padding: 12px 12px 0;
 }
 
 .performance-profile-menu-account {
-  margin: 12px;
+  margin: 0;
+  border-radius: 0;
+  padding: 12px;
+  background: transparent !important;
+  color: #667085;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.82rem;
+}
+
+.performance-profile-menu-account .account-footer-user {
+  border-top: 1px solid #e4e6e8;
+  padding-top: 12px;
+}
+
+.performance-profile-menu-account .account-footer-avatar {
+  width: 34px;
+  height: 34px;
+  background: #f3d96d;
+  color: #004165;
+  font-size: 0.78rem;
+}
+
+.performance-profile-menu-account .account-footer-eyebrow {
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.performance-profile-menu-account .account-footer-copy strong,
+.performance-profile-menu-account .account-footer-email,
+.performance-profile-menu-account .account-footer-email.is-primary {
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
+}
+
+.performance-profile-menu-account .account-footer-copy strong {
+  color: #004165;
+  font-size: 0.875rem;
+}
+
+.performance-profile-menu-account .account-footer-email,
+.performance-profile-menu-account .account-footer-email.is-primary {
+  color: #667085;
+  font-size: 0.78rem;
 }
 
 .performance-profile-menu-admin {
@@ -442,24 +615,63 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  min-height: 40px;
   border: 1px solid #004165;
-  padding: 0.55rem 1rem;
-  background: transparent;
-  color: #004165;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: #004165;
+  color: #fff;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
-  font-size: 0.6875rem;
+  font-size: 0.84rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 1rem;
+  letter-spacing: 0;
+  line-height: 1;
   text-decoration: none;
-  text-transform: uppercase;
-  transition: background-color 200ms ease, color 200ms ease;
+  text-transform: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .performance-profile-menu-admin:hover {
-  background: #004165;
+  border-color: #075b88;
+  background: #075b88;
   color: #fff;
+}
+
+.performance-profile-menu-account .change-password-button,
+.performance-profile-menu-account .sign-out-button {
+  min-height: 40px;
+  border-radius: 999px;
+  padding: 0 14px;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.performance-profile-menu-account .change-password-button svg {
+  display: none;
+}
+
+.performance-profile-menu-account .change-password-button {
+  border-color: rgba(0, 65, 101, 0.2);
+  background: rgba(0, 65, 101, 0.06);
+  color: #004165;
+}
+
+.performance-profile-menu-account .change-password-button:hover {
+  border-color: rgba(0, 65, 101, 0.35);
+  background: rgba(0, 65, 101, 0.1);
+}
+
+.performance-profile-menu-account .sign-out-button {
+  border-color: rgba(140, 29, 54, 0.26);
+  background: transparent;
+  color: #8c1d36;
+}
+
+.performance-profile-menu-account .sign-out-button:hover {
+  border-color: rgba(140, 29, 54, 0.42);
+  background: rgba(140, 29, 54, 0.06);
 }
 
 .performance-menu-button,
@@ -684,7 +896,7 @@
   gap: 24px;
 }
 
-.performance-progress-card,
+.performance-leaderboard-card,
 .performance-activity-card {
   grid-column: span 3;
 }
@@ -887,6 +1099,32 @@
   line-height: 0.95;
 }
 
+.performance-fees-unavailable {
+  color: rgba(255, 255, 255, 0.58);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.performance-fees-paid-through-empty {
+  display: flex;
+  min-height: 2.66rem;
+  align-items: center;
+}
+
+.performance-fees-details strong.performance-fees-detail-empty {
+  display: flex;
+  min-height: 1.75rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.58);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-style: italic;
+  line-height: 1.25;
+}
+
 .performance-fees-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -920,7 +1158,8 @@
   line-height: 1;
 }
 
-.performance-fees-card > button {
+.performance-fees-card > button,
+.performance-fees-action {
   display: flex;
   width: 68%;
   align-items: center;
@@ -936,6 +1175,7 @@
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1rem;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .performance-badges-card {
@@ -1014,6 +1254,16 @@
   gap: 4px;
 }
 
+.performance-earned-badges-empty {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .performance-earned-badges-row img {
   width: clamp(58px, 5vw, 72px);
   height: clamp(58px, 5vw, 72px);
@@ -1077,6 +1327,20 @@
   margin-top: 0;
 }
 
+.performance-activity-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 204px;
+  margin: 0;
+  color: #9aa1a5;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .performance-activity-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -1107,6 +1371,110 @@
 }
 
 .performance-activity-item b {
+  color: var(--pd-maroon);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.performance-leaderboard-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 38px;
+}
+
+.performance-leaderboard-heading {
+  border-bottom: 1px solid #dfe3e5;
+  padding-bottom: 10px;
+}
+
+.performance-leaderboard-heading .performance-eyebrow {
+  color: var(--pd-maroon);
+}
+
+.performance-leaderboard-heading h3 {
+  margin-top: 5px;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.performance-leaderboard-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+.performance-leaderboard-item {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.performance-leaderboard-rank {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pd-navy);
+  box-shadow: 0 4px 8px rgba(16, 35, 56, 0.14);
+  color: white;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.performance-leaderboard-member {
+  display: grid;
+  grid-template-columns: minmax(118px, 0.48fr) minmax(130px, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.performance-leaderboard-member strong {
+  display: block;
+  overflow: hidden;
+  color: var(--pd-navy);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.performance-leaderboard-track {
+  overflow: hidden;
+  height: 28px;
+  margin-top: 0;
+  border-radius: 999px;
+  background: #f1f5f9;
+  box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.7);
+}
+
+.performance-leaderboard-track span {
+  display: flex;
+  overflow: hidden;
+  width: var(--leaderboard-width);
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: inherit;
+  padding-right: 11px;
+  background: linear-gradient(90deg, var(--pd-navy), var(--pd-blue));
+  color: white;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  will-change: width;
+}
+
+.performance-leaderboard-item b {
   color: var(--pd-maroon);
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1.35rem;
@@ -2322,6 +2690,25 @@
   text-align: center;
 }
 
+.performance-members-table tr.is-top-performer td {
+  background: #fffdf4;
+  box-shadow: inset 0 1px 0 rgba(197, 160, 71, 0.12), inset 0 -1px 0 rgba(197, 160, 71, 0.12);
+}
+
+.performance-members-table tr.is-top-performer-1 td {
+  background: #fff8df;
+}
+
+.performance-members-table tr.is-top-performer-2 td,
+.performance-members-table tr.is-top-performer-3 td {
+  background: #fffaf0;
+}
+
+.performance-members-table tr.is-top-performer td:first-child {
+  box-shadow: inset 3px 0 0 rgba(197, 160, 71, 0.56), inset 0 1px 0 rgba(197, 160, 71, 0.12),
+    inset 0 -1px 0 rgba(197, 160, 71, 0.12);
+}
+
 .performance-members-table td:first-child {
   padding-left: 24px;
   color: #004165;
@@ -2342,6 +2729,21 @@
   background: #e0e2e3;
   color: #004165;
   vertical-align: middle;
+}
+
+.performance-members-table tr.is-top-performer .performance-member-rank {
+  background: rgba(243, 217, 109, 0.82);
+  color: #604715;
+}
+
+.performance-members-table tr.is-top-performer-1 .performance-member-rank {
+  background: #f3d96d;
+  color: #004165;
+  box-shadow: 0 0 0 1px rgba(124, 91, 24, 0.18);
+}
+
+.performance-members-table tr.is-top-performer td:last-child {
+  color: #781327;
 }
 
 .performance-members-table td:nth-last-child(2) {
@@ -2698,6 +3100,11 @@
     display: none;
   }
 
+  .performance-topbar-program select {
+    max-width: 8.4rem;
+    font-size: 0.82rem;
+  }
+
   .performance-content {
     width: min(100% - 28px, 720px);
     padding-top: 22px;
@@ -2774,6 +3181,7 @@
   }
 
   .performance-progress-card,
+  .performance-leaderboard-card,
   .performance-fees-card,
   .performance-badges-card,
   .performance-activity-card {
@@ -2916,6 +3324,8 @@
   .performance-badges-footer a,
   .performance-activity-item strong,
   .performance-activity-item div span,
+  .performance-leaderboard-rank,
+  .performance-leaderboard-member strong,
   .performance-members-heading p,
   .performance-members-search-area > span {
     font-size: var(--performance-mobile-semibold-size);
@@ -3033,6 +3443,7 @@
   }
 
   .performance-activity-card,
+  .performance-leaderboard-card,
   .performance-badges-card,
   .performance-fees-card,
   .performance-progress-card {

@@ -1,5 +1,6 @@
 export interface Member {
   name: string;
+  membershipNumber: string;
   levelCompletion: number;
   projectCompletion: number;
   meetingAwards: number;

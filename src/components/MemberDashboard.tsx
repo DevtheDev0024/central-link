@@ -159,6 +159,7 @@ export default function MemberDashboard({
 
         <MemberPerformanceSection
           members={filteredMembers}
+          rankingMembers={members}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           sortField={sortField}

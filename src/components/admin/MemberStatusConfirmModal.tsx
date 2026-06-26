@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { Power, RotateCcw } from 'lucide-react';
 import type { MemberAccount } from '../../types/memberAccount';
 
 type MemberStatusConfirmModalProps = {
@@ -50,13 +49,6 @@ export default function MemberStatusConfirmModal({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="admin-confirm-modal-body">
-          <div
-            className={`admin-confirm-icon ${isDeactivating ? 'is-deactivate' : 'is-activate'}`}
-            aria-hidden="true"
-          >
-            {isDeactivating ? <Power size={22} /> : <RotateCcw size={22} />}
-          </div>
-
           <h2 id="member-status-confirm-title" className="admin-confirm-title">
             {isDeactivating ? `Deactivate ${memberLabel}?` : `Reactivate ${memberLabel}?`}
           </h2>

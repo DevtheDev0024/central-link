@@ -25,7 +25,9 @@ export default function PublicSiteNav({ activeLabel }: PublicSiteNavProps) {
             <img src="/toastmasters-logo.png" alt="Toastmasters International logo" />
             <span>Central Link Toastmasters Club</span>
           </Link>
+        </div>
 
+        <div className="landing-nav-actions">
           <nav className="landing-nav-links" aria-label="Primary navigation">
             {SITE_NAV_LINKS.map((link) => {
               const isActive = link.label === activeLabel;
@@ -46,11 +48,11 @@ export default function PublicSiteNav({ activeLabel }: PublicSiteNavProps) {
               );
             })}
           </nav>
-        </div>
 
-        <Link className="landing-nav-signin" to="/login">
-          Sign In
-        </Link>
+          <Link className="landing-nav-signin" to="/login">
+            Sign In
+          </Link>
+        </div>
       </div>
     </header>
   );

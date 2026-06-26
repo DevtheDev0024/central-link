@@ -1,9 +1,14 @@
 .contact-section {
   position: relative;
   z-index: 10;
-  width: min(calc(100% - 8rem), 82rem);
-  margin: clamp(3rem, 7vh, 5rem) auto clamp(2.5rem, 5vh, 3.5rem);
+  width: 100%;
+  margin: clamp(3rem, 7vh, 5rem) 0 0;
+  padding: clamp(3.25rem, 7vw, 5.5rem) 0 0;
   scroll-margin-top: 6rem;
+  background:
+    linear-gradient(135deg, rgba(0, 65, 101, 0.96), rgba(8, 45, 74, 0.98) 48%, rgba(15, 29, 56, 0.99)),
+    var(--landing-nav-blue, #004165);
+  box-shadow: 0 -2rem 5rem rgba(0, 0, 0, 0.18);
 }
 
 .contact-page {
@@ -45,20 +50,20 @@
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(22rem, 1.08fr);
   align-items: stretch;
-  width: 100%;
+  width: min(100% - 4rem, 90rem);
+  margin: 0 auto;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: clamp(1.75rem, 4vw, 3rem);
-  background: rgba(8, 17, 34, 0.72);
-  box-shadow: 0 2.5rem 7rem rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(20px);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .contact-shell-intro {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(2.5rem, 4vw, 4rem);
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(3rem, 5vw, 5rem) clamp(3rem, 6vw, 5rem) 0;
 }
 
 .contact-title {
@@ -76,7 +81,9 @@
   max-width: 28rem;
   margin: 1.35rem 0 0;
   color: rgba(255, 255, 255, 0.72);
+  font-family: 'MyriadPro-Regular', Arial, sans-serif;
   font-size: clamp(0.96rem, 1.1vw, 1.05rem);
+  font-weight: 400;
   line-height: 1.7;
 }
 
@@ -95,10 +102,11 @@
 
 .contact-meta span {
   color: var(--landing-gold-light, #f4dc8a);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .contact-meta strong {
@@ -112,19 +120,8 @@
   flex-direction: column;
   justify-content: center;
   border-left: 1px solid rgba(255, 255, 255, 0.12);
-  padding: clamp(2rem, 3.5vw, 3rem);
-  background:
-    radial-gradient(circle at 100% 0%, rgba(232, 200, 103, 0.14), transparent 18rem),
-    rgba(255, 255, 255, 0.03);
-}
-
-.contact-form-kicker {
-  margin: 0 0 1.25rem;
-  color: var(--landing-gold-light, #f4dc8a);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  padding: clamp(0.5rem, 2vw, 1rem) 0 clamp(3rem, 6vw, 5rem) clamp(3rem, 5vw, 5rem);
+  background: transparent;
 }
 
 .contact-form {
@@ -145,10 +142,11 @@
 
 .contact-form-field label {
   color: var(--landing-gold-light, #f4dc8a);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .contact-form-field input,
@@ -156,12 +154,13 @@
 .contact-form-field textarea {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 0.75rem;
-  padding: 0.8rem 0.95rem;
-  font: inherit;
+  border-radius: 999px;
+  padding: 0.82rem 1.15rem;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 0.92rem;
+  font-weight: 600;
   color: #fff;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
@@ -175,8 +174,11 @@
 }
 
 .contact-form-field textarea {
-  resize: vertical;
+  height: 7.5rem;
   min-height: 7.5rem;
+  max-height: 7.5rem;
+  border-radius: 1.35rem;
+  resize: none;
 }
 
 .contact-form-field input::placeholder,
@@ -195,21 +197,23 @@
 
 .contact-form-submit {
   display: inline-flex;
-  width: 100%;
+  width: fit-content;
+  min-width: 11.5rem;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  margin-top: 0.25rem;
+  justify-self: end;
+  margin-top: 0.35rem;
   border: 1px solid var(--landing-gold, #e8c867);
   border-radius: 999px;
-  padding: 0.85rem 1.25rem;
+  padding: 0.85rem 1.35rem;
   background: var(--landing-gold, #e8c867);
   color: var(--landing-navy-dark, #0f1d38);
-  font: inherit;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
@@ -243,7 +247,7 @@
   display: grid;
   gap: 0.85rem;
   padding: 1rem 0;
-  text-align: center;
+  text-align: left;
 }
 
 .contact-form-success strong {
@@ -261,22 +265,23 @@
   line-height: 1.6;
 }
 
-.contact-footer {
+.contact-footer-bottom {
   position: relative;
   z-index: 10;
   flex-shrink: 0;
-  width: min(100% - 4rem, 82rem);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(100% - 4rem, 90rem);
   margin: 0 auto;
-}
-
-.contact-footer a {
-  color: rgba(255, 255, 255, 0.72);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.contact-footer a:hover {
-  color: var(--landing-gold-light, #f4dc8a);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 1.35rem 0 1.75rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: 'MyriadPro-Regular', Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 @keyframes contactFormSpin {
@@ -287,7 +292,7 @@
 
 @media (max-width: 960px) {
   .contact-section {
-    width: min(calc(100% - 2.5rem), 82rem);
+    padding-top: 3rem;
   }
 
   .contact-main {
@@ -297,39 +302,52 @@
 
   .contact-shell {
     grid-template-columns: 1fr;
+    width: min(100% - 2.5rem, 82rem);
   }
 
   .contact-shell-form {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     border-left: 0;
+    padding: 2.25rem 0 3rem;
   }
 
-  .contact-footer {
+  .contact-shell-intro {
+    padding: 0 0 2.5rem;
+  }
+
+  .contact-footer-bottom {
     width: min(100% - 2.5rem, 82rem);
   }
 }
 
 @media (max-width: 720px) {
   .contact-section {
-    width: min(calc(100% - 1.5rem), 82rem);
-    margin: 2.5rem auto 2rem;
+    margin: 2.5rem 0 0;
+    padding-top: 2.5rem;
   }
 
   .contact-main,
-  .contact-footer {
+  .contact-footer-bottom {
     width: min(100% - 1.5rem, 82rem);
   }
 
-  .contact-shell-intro,
+  .contact-shell {
+    width: min(100% - 1.5rem, 82rem);
+  }
+
+  .contact-shell-intro {
+    padding-bottom: 2rem;
+  }
+
   .contact-shell-form {
-    padding: 1.75rem 1.35rem;
+    padding: 2rem 0 2.5rem;
   }
 
   .contact-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .contact-footer {
+  .contact-footer-bottom {
     display: grid;
     justify-content: start;
     gap: 0.75rem;

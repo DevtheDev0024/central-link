@@ -1,14 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
-import { Bell, ChevronRight, Menu, Search, Shield } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Bell, ChevronDown, ChevronRight, Menu, Search } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { getMemberNotifications } from '../../data/memberNotifications';
 import AccountFooterPanel from '../auth/AccountFooterPanel';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
+import { DASHBOARD_SOURCES, type DashboardYearKey } from '../../config/dashboardYears';
 import { useAuth } from '../../context/AuthContext';
 import { useMemberProfile } from '../../hooks/useMemberProfile';
 import { LOGIN_SIGNED_OUT_STATE } from '../../lib/authNavigation';
 import { MEMBER_PORTAL_BASE, memberPortalNav } from './navItems';
 import '../../styles/auth.css';
 import '../../styles/performance-dashboard.css';
+
+const programOptions = (Object.entries(DASHBOARD_SOURCES) as Array<
+  [DashboardYearKey, (typeof DASHBOARD_SOURCES)[DashboardYearKey]]
+>).map(([key, source]) => ({
+  key,
+  label: source.label.replace(' Dashboard', ''),
+}));
+
+export type MemberPortalOutletContext = {
+  programKey: DashboardYearKey;
+};
 
 function useActiveLabel() {
   const { pathname } = useLocation();
@@ -44,23 +57,34 @@ export default function MemberPortalLayout() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [selectedProgramKey, setSelectedProgramKey] = useState<DashboardYearKey>(programOptions[0].key);
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const notificationMenuRef = useRef<HTMLDivElement>(null);
   const closeMenu = () => setIsMenuOpen(false);
   const activeLabel = useActiveLabel();
+  const notifications = useMemo(() => getMemberNotifications(email), [email]);
+  const hasNotifications = notifications.length > 0;
 
   useEffect(() => {
-    if (!isProfileMenuOpen) return;
+    if (!isProfileMenuOpen && !isNotificationsOpen) return;
 
     const handlePointerDown = (event: MouseEvent) => {
-      if (!profileMenuRef.current?.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const isInsideProfileMenu = profileMenuRef.current?.contains(target);
+      const isInsideNotificationMenu = notificationMenuRef.current?.contains(target);
+
+      if (!isInsideProfileMenu && !isInsideNotificationMenu) {
         setIsProfileMenuOpen(false);
+        setIsNotificationsOpen(false);
       }
     };
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsProfileMenuOpen(false);
+        setIsNotificationsOpen(false);
       }
     };
 
@@ -71,10 +95,11 @@ export default function MemberPortalLayout() {
       document.removeEventListener('mousedown', handlePointerDown);
       window.removeEventListener('keydown', handleEscape);
     };
-  }, [isProfileMenuOpen]);
+  }, [isNotificationsOpen, isProfileMenuOpen]);
 
   const handleSignOut = () => {
     setIsProfileMenuOpen(false);
+    setIsNotificationsOpen(false);
     void signOut().then(() => {
       navigate('/login', { replace: true, state: LOGIN_SIGNED_OUT_STATE });
     });
@@ -82,6 +107,7 @@ export default function MemberPortalLayout() {
 
   const handleChangePassword = () => {
     setIsProfileMenuOpen(false);
+    setIsNotificationsOpen(false);
     setIsChangePasswordOpen(true);
   };
 
@@ -152,14 +178,65 @@ export default function MemberPortalLayout() {
           </div>
 
           <div className="performance-topbar-actions">
+            <label className="performance-topbar-program">
+              <select
+                aria-label="Select programme year"
+                value={selectedProgramKey}
+                onChange={(event) => setSelectedProgramKey(event.target.value as DashboardYearKey)}
+              >
+                {programOptions.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={16} aria-hidden="true" />
+            </label>
             <label className="performance-search">
               <Search size={19} />
               <input type="search" placeholder="Search dashboard" aria-label="Search dashboard" />
             </label>
-            <button type="button" className="performance-icon-button" aria-label="Notifications">
-              <Bell size={22} strokeWidth={2.4} />
-              <span />
-            </button>
+            <div className="performance-notification-menu-wrap" ref={notificationMenuRef}>
+              <button
+                type="button"
+                className={`performance-icon-button${isNotificationsOpen ? ' is-open' : ''}`}
+                aria-label="Notifications"
+                aria-expanded={isNotificationsOpen}
+                aria-haspopup="dialog"
+                onClick={() => {
+                  setIsProfileMenuOpen(false);
+                  setIsNotificationsOpen((open) => !open);
+                }}
+              >
+                <Bell size={22} strokeWidth={2.4} />
+                {hasNotifications ? <span aria-hidden="true" /> : null}
+              </button>
+
+              {isNotificationsOpen ? (
+                <div className="performance-notification-menu" role="dialog" aria-label="Notifications">
+                  <div className="performance-notification-menu-header">
+                    <strong>Notifications</strong>
+                  </div>
+                  <div className="performance-notification-menu-body">
+                    {hasNotifications ? (
+                      <div className="performance-notification-list">
+                        {notifications.map((notification) => (
+                          <article key={notification.id} className="performance-notification-item">
+                            <div>
+                              <strong>{notification.title}</strong>
+                              <p>{notification.message}</p>
+                            </div>
+                            <time dateTime={notification.createdAt}>{notification.createdAt}</time>
+                          </article>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="performance-notification-menu-empty">No notifications</p>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+            </div>
 
             <div className="performance-profile-menu-wrap" ref={profileMenuRef}>
               <button
@@ -168,7 +245,10 @@ export default function MemberPortalLayout() {
                 aria-label="Open account menu"
                 aria-expanded={isProfileMenuOpen}
                 aria-haspopup="menu"
-                onClick={() => setIsProfileMenuOpen((open) => !open)}
+                onClick={() => {
+                  setIsNotificationsOpen(false);
+                  setIsProfileMenuOpen((open) => !open);
+                }}
               >
                 <ProfileAvatar />
               </button>
@@ -177,7 +257,7 @@ export default function MemberPortalLayout() {
                 <div className="performance-profile-menu" role="menu">
                   <div className="performance-profile-menu-header">
                     <strong>{displayName}</strong>
-                    <span>{roleLabel}</span>
+                    <span className="performance-profile-menu-role">{roleLabel}</span>
                   </div>
 
                   {isAdmin ? (
@@ -188,8 +268,7 @@ export default function MemberPortalLayout() {
                         role="menuitem"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
-                        <Shield size={15} aria-hidden="true" />
-                        Admin Panel
+                        Admin Console
                       </Link>
                     </div>
                   ) : null}
@@ -211,7 +290,7 @@ export default function MemberPortalLayout() {
         <ChangePasswordModal isOpen={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
 
         <main className="performance-content">
-          <Outlet />
+          <Outlet context={{ programKey: selectedProgramKey } satisfies MemberPortalOutletContext} />
         </main>
       </div>
     </div>

@@ -6,6 +6,7 @@ import PointsHelpButton from './PointsHelpButton';
 
 type MemberPerformanceSectionProps = {
   members: Member[];
+  rankingMembers?: Member[];
   searchTerm: string;
   onSearchChange: (value: string) => void;
   sortField: keyof Member;
@@ -19,6 +20,17 @@ type MemberPerformanceSectionProps = {
 
 const cellClass =
   "font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-slate-800";
+
+const topPerformerKey = (member: Member) => `${member.name}-${member.ajScore}`;
+
+function getTopPerformerRanks(members: Member[]) {
+  return new Map(
+    [...members]
+      .sort((first, second) => second.ajScore - first.ajScore)
+      .slice(0, 5)
+      .map((member, index) => [topPerformerKey(member), index + 1])
+  );
+}
 
 function SortIcon({
   field,
@@ -73,6 +85,7 @@ function MeetingRoleTags({ roles, variant }: { roles: string[]; variant: 'mobile
 
 function PerformanceDashboardTable({
   members,
+  rankingMembers,
   searchTerm,
   onSearchChange,
   sortField,
@@ -83,6 +96,7 @@ function PerformanceDashboardTable({
 }: Pick<
   MemberPerformanceSectionProps,
   | 'members'
+  | 'rankingMembers'
   | 'searchTerm'
   | 'onSearchChange'
   | 'sortField'
@@ -92,6 +106,7 @@ function PerformanceDashboardTable({
   | 'totalMemberCount'
 >) {
   const columns = TABLE_METRICS.filter((metric) => metric.field !== 'ajScore');
+  const topPerformerRanks = getTopPerformerRanks(rankingMembers ?? members);
 
   return (
     <section className="performance-members-card">
@@ -140,9 +155,17 @@ function PerformanceDashboardTable({
           <tbody>
             {members.map((member, index) => {
               const growth = Math.min(100, Math.round((member.ajScore / 186) * 100));
+              const topPerformerRank = topPerformerRanks.get(topPerformerKey(member));
 
               return (
-                <tr key={`${member.name}-${index}`}>
+                <tr
+                  key={`${member.name}-${index}`}
+                  className={
+                    topPerformerRank
+                      ? `is-top-performer is-top-performer-${topPerformerRank}`
+                      : undefined
+                  }
+                >
                   <td>
                     <span className="performance-member-rank">{index + 1}</span>
                     <strong>{member.name}</strong>
@@ -173,6 +196,7 @@ function PerformanceDashboardTable({
 
 export default function MemberPerformanceSection({
   members,
+  rankingMembers,
   searchTerm,
   onSearchChange,
   sortField,
@@ -183,10 +207,13 @@ export default function MemberPerformanceSection({
   variant = 'default',
   totalMemberCount,
 }: MemberPerformanceSectionProps) {
+  const topPerformerRanks = getTopPerformerRanks(rankingMembers ?? members);
+
   if (variant === 'performance-dashboard') {
     return (
       <PerformanceDashboardTable
         members={members}
+        rankingMembers={rankingMembers}
         searchTerm={searchTerm}
         onSearchChange={onSearchChange}
         sortField={sortField}
@@ -237,60 +264,80 @@ export default function MemberPerformanceSection({
       </div>
 
       <div className="space-y-4 bg-[#eef2f6] p-4 sm:hidden">
-        {members.map((member, index) => (
-          <article
-            key={index}
-            className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white/90 shadow-[0_16px_36px_rgba(15,29,56,0.08)] backdrop-blur-sm"
-          >
-            <button type="button" className="w-full text-left" onClick={() => onMemberSelect(member)}>
-              <div className="border-b border-white/10 bg-[linear-gradient(135deg,#153159_0%,#21416f_58%,#2d4a7c_100%)] p-4 text-white">
-                <div className="flex items-start gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-toastmasters-gold text-sm font-bold text-toastmasters-navy shadow-md">
-                    {index + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="break-words text-lg font-bold leading-snug">{member.name}</h3>
-                    <p className="mt-1 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-toastmasters-gold-light">
-                      Member Progress
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-toastmasters-gold ring-1 ring-white/15">
-                    {member.ajScore}
-                  </span>
-                </div>
-                <MeetingRoleTags roles={member.meetingRoles} variant="mobile" />
-              </div>
+        {members.map((member, index) => {
+          const topPerformerRank = topPerformerRanks.get(topPerformerKey(member));
 
-              <div className="border-b border-slate-200 bg-white px-4 py-4">
-                <MemberGrowthProgress totalPoints={member.ajScore} />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 bg-white p-4">
-                {MEMBER_METRICS.map((metric) => (
-                  <div
-                    key={metric.field}
-                    className={`rounded-xl border p-3 ${
-                      metric.tone === 'score'
-                        ? 'border-toastmasters-gold/50 bg-[#fff8e1]'
-                        : 'border-slate-200/70 bg-slate-50/90'
-                    }`}
-                  >
-                    <p className="min-h-[2.25rem] text-[0.68rem] font-bold uppercase leading-4 tracking-[0.08em] text-slate-500">
-                      {metric.label}
-                    </p>
+          return (
+            <article
+              key={index}
+              className={`overflow-hidden rounded-[1.5rem] border shadow-[0_16px_36px_rgba(15,29,56,0.08)] backdrop-blur-sm ${
+                topPerformerRank
+                  ? 'border-toastmasters-gold/45 bg-[#fffaf0]'
+                  : 'border-slate-200/80 bg-white/90'
+              }`}
+            >
+              <button type="button" className="w-full text-left" onClick={() => onMemberSelect(member)}>
+                <div
+                  className={`border-b border-white/10 p-4 text-white ${
+                    topPerformerRank === 1
+                      ? 'bg-[linear-gradient(135deg,#6f4f12_0%,#8f6419_44%,#14335c_100%)]'
+                      : 'bg-[linear-gradient(135deg,#153159_0%,#21416f_58%,#2d4a7c_100%)]'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
                     <span
-                      className={`mt-2 inline-flex min-w-9 items-center justify-center rounded-full px-3 py-1 text-sm font-bold ${getMetricValueClass(
-                        metric.tone
-                      )}`}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold shadow-md ${
+                        topPerformerRank
+                          ? 'bg-[#f3d96d] text-toastmasters-navy ring-1 ring-white/40'
+                          : 'bg-toastmasters-gold text-toastmasters-navy'
+                      }`}
                     >
-                      {member[metric.field] as number}
+                      {index + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="break-words text-lg font-bold leading-snug">{member.name}</h3>
+                      <p className="mt-1 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-toastmasters-gold-light">
+                        Member Progress
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-toastmasters-gold ring-1 ring-white/15">
+                      {member.ajScore}
                     </span>
                   </div>
-                ))}
-              </div>
-            </button>
-          </article>
-        ))}
+                  <MeetingRoleTags roles={member.meetingRoles} variant="mobile" />
+                </div>
+
+                <div className="border-b border-slate-200 bg-white px-4 py-4">
+                  <MemberGrowthProgress totalPoints={member.ajScore} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 bg-white p-4">
+                  {MEMBER_METRICS.map((metric) => (
+                    <div
+                      key={metric.field}
+                      className={`rounded-xl border p-3 ${
+                        metric.tone === 'score'
+                          ? 'border-toastmasters-gold/50 bg-[#fff8e1]'
+                          : 'border-slate-200/70 bg-slate-50/90'
+                      }`}
+                    >
+                      <p className="min-h-[2.25rem] text-[0.68rem] font-bold uppercase leading-4 tracking-[0.08em] text-slate-500">
+                        {metric.label}
+                      </p>
+                      <span
+                        className={`mt-2 inline-flex min-w-9 items-center justify-center rounded-full px-3 py-1 text-sm font-bold ${getMetricValueClass(
+                          metric.tone
+                        )}`}
+                      >
+                        {member[metric.field] as number}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </button>
+            </article>
+          );
+        })}
       </div>
 
       <div className="relative left-1/2 mt-6 hidden w-screen -translate-x-1/2 px-4 sm:block sm:px-6 lg:px-10">
@@ -326,52 +373,80 @@ export default function MemberPerformanceSection({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 bg-white">
-              {members.map((member, index) => (
-                <tr
-                  key={index}
-                  className="group cursor-pointer transition-colors hover:bg-[#f8fafc]"
-                  tabIndex={0}
-                  onClick={() => onMemberSelect(member)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                      event.preventDefault();
-                      onMemberSelect(member);
-                    }
-                  }}
-                >
-                  <td className="sticky left-0 z-20 bg-white px-4 py-3 shadow-[8px_0_18px_rgba(15,29,56,0.05)] transition-colors group-hover:bg-[#f8fafc]">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-toastmasters-navy text-xs font-bold text-white shadow-sm">
-                        {index + 1}
-                      </span>
-                      <button
-                        type="button"
-                        className="min-w-0 text-left text-[0.95rem] font-semibold leading-snug text-slate-900 transition hover:text-toastmasters-maroon focus:outline-none focus:ring-2 focus:ring-toastmasters-gold/40"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onMemberSelect(member);
-                        }}
-                      >
-                        {member.name}
-                      </button>
-                    </div>
-                    <MeetingRoleTags roles={member.meetingRoles} variant="desktop" />
-                  </td>
-                  {TABLE_METRICS.filter((metric) => metric.field !== 'ajScore').map((metric) => (
-                    <td key={metric.field} className="px-3 py-3 text-center">
-                      <span className={cellClass}>{member[metric.field] as number}</span>
+              {members.map((member, index) => {
+                const topPerformerRank = topPerformerRanks.get(topPerformerKey(member));
+                const highlightedRowClass =
+                  topPerformerRank === 1
+                    ? 'bg-[#fff8df] shadow-[inset_3px_0_0_rgba(197,160,71,0.62)] hover:bg-[#fff3cc]'
+                    : topPerformerRank
+                      ? 'bg-[#fffaf0] shadow-[inset_3px_0_0_rgba(197,160,71,0.45)] hover:bg-[#fff7df]'
+                      : 'hover:bg-[#f8fafc]';
+                const highlightedEdgeCellClass =
+                  topPerformerRank === 1
+                    ? 'bg-[#fff8df] group-hover:bg-[#fff3cc]'
+                    : topPerformerRank
+                      ? 'bg-[#fffaf0] group-hover:bg-[#fff7df]'
+                      : 'bg-white group-hover:bg-[#f8fafc]';
+
+                return (
+                  <tr
+                    key={index}
+                    className={`group cursor-pointer transition-colors ${highlightedRowClass}`}
+                    tabIndex={0}
+                    onClick={() => onMemberSelect(member)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        onMemberSelect(member);
+                      }
+                    }}
+                  >
+                    <td
+                      className={`sticky left-0 z-20 px-4 py-3 shadow-[8px_0_18px_rgba(15,29,56,0.05)] transition-colors ${highlightedEdgeCellClass}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold shadow-sm ${
+                            topPerformerRank
+                              ? `${
+                                  topPerformerRank === 1 ? 'bg-[#f3d96d]' : 'bg-[#c5a047]'
+                                } text-toastmasters-navy ring-1 ring-[#8f6e24]/20`
+                              : 'bg-toastmasters-navy text-white'
+                          }`}
+                        >
+                          {index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          className="min-w-0 text-left text-[0.95rem] font-semibold leading-snug text-slate-900 transition hover:text-toastmasters-maroon focus:outline-none focus:ring-2 focus:ring-toastmasters-gold/40"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onMemberSelect(member);
+                          }}
+                        >
+                          {member.name}
+                        </button>
+                      </div>
+                      <MeetingRoleTags roles={member.meetingRoles} variant="desktop" />
                     </td>
-                  ))}
-                  <td className="px-3 py-3">
-                    <MemberGrowthProgress totalPoints={member.ajScore} compact />
-                  </td>
-                  <td className="sticky right-0 z-20 bg-white px-3 py-3 text-center shadow-[-8px_0_18px_rgba(15,29,56,0.05)] transition-colors group-hover:bg-[#f8fafc]">
-                    <span className="font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-[#781327]">
-                      {member.ajScore}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+                    {TABLE_METRICS.filter((metric) => metric.field !== 'ajScore').map((metric) => (
+                      <td key={metric.field} className="px-3 py-3 text-center">
+                        <span className={cellClass}>{member[metric.field] as number}</span>
+                      </td>
+                    ))}
+                    <td className="px-3 py-3">
+                      <MemberGrowthProgress totalPoints={member.ajScore} compact />
+                    </td>
+                    <td
+                      className={`sticky right-0 z-20 px-3 py-3 text-center shadow-[-8px_0_18px_rgba(15,29,56,0.05)] transition-colors ${highlightedEdgeCellClass}`}
+                    >
+                      <span className="font-['MyriadPro-Semibold',Arial,sans-serif] text-base font-semibold text-[#781327]">
+                        {member.ajScore}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
