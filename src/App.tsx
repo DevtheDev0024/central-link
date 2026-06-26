@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ExcoRolesPage from './components/memberPortal/ExcoRolesPage';
 import InDevelopmentPage from './components/memberPortal/InDevelopmentPage';
 import MeetingRolesPage from './components/memberPortal/MeetingRolesPage';
 import MemberPortalLayout from './components/memberPortal/MemberPortalLayout';
@@ -50,8 +51,15 @@ function App() {
           <Route index element={<PerformanceDashboardPage />} />
           <Route path="pathways" element={<PathwaysPage />} />
           <Route path="meeting-roles" element={<MeetingRolesPage />} />
+          <Route path="exco-roles-duties" element={<ExcoRolesPage />} />
           {memberPortalNav
-            .filter((item) => item.slug && item.slug !== 'pathways' && item.slug !== 'meeting-roles')
+            .filter(
+              (item) =>
+                item.slug &&
+                item.slug !== 'pathways' &&
+                item.slug !== 'meeting-roles' &&
+                item.slug !== 'exco-roles-duties',
+            )
             .map((item) => (
               <Route
                 key={item.slug}

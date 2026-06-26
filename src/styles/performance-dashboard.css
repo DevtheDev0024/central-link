@@ -1878,6 +1878,30 @@
   margin-top: 20px;
 }
 
+.performance-exco-roles-points-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 12px;
+  width: min(100%, 460px);
+  margin-top: 20px;
+}
+
+.performance-exco-roles-points-grid .performance-meeting-roles-points-item {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  min-height: 88px;
+}
+
+.performance-exco-roles-points-grid .performance-meeting-roles-points-item > span {
+  flex: none;
+}
+
+.performance-exco-roles-points-grid .performance-meeting-roles-points-item .performance-meeting-role-points {
+  align-self: flex-start;
+}
+
 .performance-meeting-roles-points-item {
   display: flex;
   min-height: 76px;
@@ -2822,6 +2846,11 @@
 
   .performance-meeting-roles-points-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .performance-exco-roles-points-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
   }
 
   .performance-pathways-activity {
