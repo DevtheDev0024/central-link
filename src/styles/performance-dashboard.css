@@ -131,7 +131,7 @@
   align-items: center;
   gap: 10px;
   border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 8px;
+  border-radius: 24px;
   padding: 0 14px;
   background: rgba(255, 255, 255, 0.04);
   color: #fff;
@@ -394,20 +394,22 @@
   top: calc(100% + 10px);
   right: 0;
   z-index: 70;
-  width: min(18rem, calc(100vw - 2rem));
+  width: min(19rem, calc(100vw - 2rem));
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  border: 1px solid #dfe3e5;
+  border-radius: 8px;
   background: #fff;
-  box-shadow: 0 16px 40px rgba(16, 35, 56, 0.14);
+  box-shadow: 0 14px 35px rgba(16, 35, 56, 0.12);
+  color: #102338;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
 }
 
 .performance-profile-menu-header {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 16px 16px 13px;
+  border-bottom: 1px solid #e4e6e8;
 }
 
 .performance-profile-menu-header strong {
@@ -418,10 +420,12 @@
 }
 
 .performance-profile-menu-header span {
-  color: #667085;
+  color: #8c1d36;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.6875rem;
   font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .performance-profile-menu-email {
@@ -430,11 +434,56 @@
 }
 
 .performance-profile-menu-actions {
-  padding: 12px 16px 0;
+  padding: 12px 12px 0;
 }
 
 .performance-profile-menu-account {
-  margin: 12px;
+  margin: 0;
+  border-radius: 0;
+  padding: 12px;
+  background: transparent !important;
+  color: #667085;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.82rem;
+}
+
+.performance-profile-menu-account .account-footer-user {
+  border-top: 1px solid #e4e6e8;
+  padding-top: 12px;
+}
+
+.performance-profile-menu-account .account-footer-avatar {
+  width: 34px;
+  height: 34px;
+  background: #f3d96d;
+  color: #004165;
+  font-size: 0.78rem;
+}
+
+.performance-profile-menu-account .account-footer-eyebrow {
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.performance-profile-menu-account .account-footer-copy strong,
+.performance-profile-menu-account .account-footer-email,
+.performance-profile-menu-account .account-footer-email.is-primary {
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-weight: 600;
+}
+
+.performance-profile-menu-account .account-footer-copy strong {
+  color: #004165;
+  font-size: 0.875rem;
+}
+
+.performance-profile-menu-account .account-footer-email,
+.performance-profile-menu-account .account-footer-email.is-primary {
+  color: #667085;
+  font-size: 0.78rem;
 }
 
 .performance-profile-menu-admin {
@@ -442,24 +491,63 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  min-height: 40px;
   border: 1px solid #004165;
-  padding: 0.55rem 1rem;
-  background: transparent;
-  color: #004165;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: #004165;
+  color: #fff;
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
-  font-size: 0.6875rem;
+  font-size: 0.84rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 1rem;
+  letter-spacing: 0;
+  line-height: 1;
   text-decoration: none;
-  text-transform: uppercase;
-  transition: background-color 200ms ease, color 200ms ease;
+  text-transform: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .performance-profile-menu-admin:hover {
-  background: #004165;
+  border-color: #075b88;
+  background: #075b88;
   color: #fff;
+}
+
+.performance-profile-menu-account .change-password-button,
+.performance-profile-menu-account .sign-out-button {
+  min-height: 40px;
+  border-radius: 999px;
+  padding: 0 14px;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.performance-profile-menu-account .change-password-button svg {
+  display: none;
+}
+
+.performance-profile-menu-account .change-password-button {
+  border-color: rgba(0, 65, 101, 0.2);
+  background: rgba(0, 65, 101, 0.06);
+  color: #004165;
+}
+
+.performance-profile-menu-account .change-password-button:hover {
+  border-color: rgba(0, 65, 101, 0.35);
+  background: rgba(0, 65, 101, 0.1);
+}
+
+.performance-profile-menu-account .sign-out-button {
+  border-color: rgba(140, 29, 54, 0.26);
+  background: transparent;
+  color: #8c1d36;
+}
+
+.performance-profile-menu-account .sign-out-button:hover {
+  border-color: rgba(140, 29, 54, 0.42);
+  background: rgba(140, 29, 54, 0.06);
 }
 
 .performance-menu-button,
@@ -684,7 +772,7 @@
   gap: 24px;
 }
 
-.performance-progress-card,
+.performance-leaderboard-card,
 .performance-activity-card {
   grid-column: span 3;
 }
@@ -1094,6 +1182,107 @@
 }
 
 .performance-activity-item b {
+  color: var(--pd-maroon);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.performance-leaderboard-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 38px;
+}
+
+.performance-leaderboard-heading {
+  border-bottom: 1px solid #dfe3e5;
+  padding-bottom: 10px;
+}
+
+.performance-leaderboard-heading .performance-eyebrow {
+  color: var(--pd-maroon);
+}
+
+.performance-leaderboard-heading h3 {
+  margin-top: 5px;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.performance-leaderboard-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+.performance-leaderboard-item {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.performance-leaderboard-rank {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pd-navy);
+  box-shadow: 0 4px 8px rgba(16, 35, 56, 0.14);
+  color: white;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.performance-leaderboard-member {
+  display: grid;
+  grid-template-columns: minmax(118px, 0.48fr) minmax(130px, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.performance-leaderboard-member strong {
+  display: block;
+  overflow: hidden;
+  color: var(--pd-navy);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.performance-leaderboard-track {
+  overflow: hidden;
+  height: 28px;
+  margin-top: 0;
+  border-radius: 999px;
+  background: #f1f5f9;
+  box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.7);
+}
+
+.performance-leaderboard-track span {
+  display: flex;
+  min-width: 34px;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: inherit;
+  padding-right: 11px;
+  background: linear-gradient(90deg, var(--pd-navy), var(--pd-blue));
+  color: white;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.performance-leaderboard-item b {
   color: var(--pd-maroon);
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1.35rem;
@@ -1781,6 +1970,7 @@
   }
 
   .performance-progress-card,
+  .performance-leaderboard-card,
   .performance-fees-card,
   .performance-badges-card,
   .performance-activity-card {
@@ -1845,6 +2035,8 @@
   .performance-badges-footer button,
   .performance-activity-item strong,
   .performance-activity-item div span,
+  .performance-leaderboard-rank,
+  .performance-leaderboard-member strong,
   .performance-members-heading p,
   .performance-members-search-area > span {
     font-size: var(--performance-mobile-semibold-size);
@@ -1962,6 +2154,7 @@
   }
 
   .performance-activity-card,
+  .performance-leaderboard-card,
   .performance-badges-card,
   .performance-fees-card,
   .performance-progress-card {

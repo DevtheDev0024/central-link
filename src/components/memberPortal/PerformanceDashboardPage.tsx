@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Check, ChevronRight } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronRight } from 'lucide-react';
 import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
 import type { BadgeDefinition } from '../../types/badges';
 import type { PointsModalTab } from '../../types/badges';
@@ -31,21 +31,6 @@ const earnedBadges = [
   { name: 'Evaluation Champion', image: '/badges/Evaluation-Champion.png' },
   { name: 'Contest Star', image: '/badges/Contest-Star.png' },
   { name: 'Meeting Star', image: '/badges/Meeting-Star.png' },
-];
-
-const pathwayLevels = [
-  { level: 'L1', status: 'complete' },
-  { level: 'L2', status: 'complete' },
-  { level: 'L3', status: 'current' },
-  { level: 'L4', status: 'locked' },
-  { level: 'L5', status: 'locked' },
-];
-
-const pathwayProjects = [
-  { name: 'Understanding Your Communication Style', done: true },
-  { name: 'Effective Body Language', done: true },
-  { name: 'Persuasive Speaking', done: false },
-  { name: 'Managing a Difficult Audience', done: false },
 ];
 
 const performanceMembers: Member[] = [
@@ -112,7 +97,13 @@ export default function PerformanceDashboardPage() {
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [pointsModalTab, setPointsModalTab] = useState<PointsModalTab>('scoring');
   const [selectedCalculatorBadgeId, setSelectedCalculatorBadgeId] = useState(BADGE_CALCULATOR_RULES[0].id);
+  const [leaderboardAnimationProgress, setLeaderboardAnimationProgress] = useState(0);
   const badgeCloseTimeoutRef = useRef<number | null>(null);
+  const topPerformers = useMemo(() => {
+    return [...performanceMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
+  }, []);
+  const topPerformerScore = Math.max(...topPerformers.map((member) => member.ajScore), 1);
+  const leaderboardAnimationKey = topPerformers.map((member) => `${member.name}-${member.ajScore}`).join('|');
 
   const visibleMembers = performanceMembers
     .filter((member) => member.name.toLowerCase().includes(memberSearchTerm.toLowerCase()))
@@ -188,6 +179,35 @@ export default function PerformanceDashboardPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion) {
+      setLeaderboardAnimationProgress(1);
+      return;
+    }
+
+    let animationFrame = 0;
+    const duration = 950;
+    const startTime = performance.now();
+
+    const tick = (time: number) => {
+      const progress = Math.min((time - startTime) / duration, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+      setLeaderboardAnimationProgress(easedProgress);
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(tick);
+      }
+    };
+
+    setLeaderboardAnimationProgress(0);
+    animationFrame = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [leaderboardAnimationKey]);
+
   return (
     <>
       <section className="performance-hero">
@@ -233,39 +253,18 @@ export default function PerformanceDashboardPage() {
       </section>
 
       <section className="performance-grid">
-        <article className="performance-card performance-progress-card">
-          <div className="performance-card-heading">
-            <div>
-              <span className="performance-eyebrow">Pathways progress</span>
-              <h3>Presentation Mastery</h3>
-            </div>
-            <div className="performance-percent">
-              <strong>69%</strong>
-              <span>Overall</span>
-            </div>
+        <article className="performance-card performance-activity-card">
+          <div className="performance-activity-heading">
+            <span className="performance-eyebrow">Latest Updates</span>
+            <h3>Recent Activity</h3>
           </div>
-
-          <div className="performance-levels">
-            {pathwayLevels.map((item) => (
-              <div key={item.level} className={`performance-level is-${item.status}`}>
-                <span>{item.level}</span>
-                <i />
+          <div className="performance-activity-list">
+            {activities.map(({ title, detail, points }) => (
+              <div key={title} className="performance-activity-item">
+                <div><strong>{title}</strong><span>{detail}</span></div>
+                <b>{points}</b>
               </div>
             ))}
-          </div>
-
-          <div className="performance-projects">
-            <span className="performance-projects-title">Level 3 Projects</span>
-            <ul className="performance-project-list">
-              {pathwayProjects.map((project) => (
-                <li key={project.name} className={project.done ? 'is-done' : 'is-pending'}>
-                  <span className="performance-project-mark">
-                    {project.done && <Check size={15} strokeWidth={3.5} />}
-                  </span>
-                  <span>{project.name}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </article>
 
@@ -305,16 +304,24 @@ export default function PerformanceDashboardPage() {
           </div>
         </article>
 
-        <article className="performance-card performance-activity-card">
-          <div className="performance-activity-heading">
-            <span className="performance-eyebrow">Latest Updates</span>
-            <h3>Recent Activity</h3>
+        <article className="performance-card performance-leaderboard-card">
+          <div className="performance-leaderboard-heading">
+            <span className="performance-eyebrow">Leaderboard</span>
+            <h3>Top 5 Performers</h3>
           </div>
-          <div className="performance-activity-list">
-            {activities.map(({ title, detail, points }) => (
-              <div key={title} className="performance-activity-item">
-                <div><strong>{title}</strong><span>{detail}</span></div>
-                <b>{points}</b>
+          <div className="performance-leaderboard-list">
+            {topPerformers.map((member, index) => (
+              <div key={member.name} className="performance-leaderboard-item">
+                <span className="performance-leaderboard-rank">{index + 1}</span>
+                <div className="performance-leaderboard-member">
+                  <strong>{member.name}</strong>
+                  <div className="performance-leaderboard-track">
+                    <span style={{ width: `${(member.ajScore / topPerformerScore) * 100 * leaderboardAnimationProgress}%` }}>
+                      {Math.round(member.ajScore * leaderboardAnimationProgress).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <b>{member.ajScore}</b>
               </div>
             ))}
           </div>
