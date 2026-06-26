@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
 import type { BadgeDefinition } from '../../types/badges';
@@ -97,13 +97,11 @@ export default function PerformanceDashboardPage() {
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [pointsModalTab, setPointsModalTab] = useState<PointsModalTab>('scoring');
   const [selectedCalculatorBadgeId, setSelectedCalculatorBadgeId] = useState(BADGE_CALCULATOR_RULES[0].id);
-  const [leaderboardAnimationProgress, setLeaderboardAnimationProgress] = useState(0);
   const badgeCloseTimeoutRef = useRef<number | null>(null);
   const topPerformers = useMemo(() => {
     return [...performanceMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
   }, []);
   const topPerformerScore = Math.max(...topPerformers.map((member) => member.ajScore), 1);
-  const leaderboardAnimationKey = topPerformers.map((member) => `${member.name}-${member.ajScore}`).join('|');
 
   const visibleMembers = performanceMembers
     .filter((member) => member.name.toLowerCase().includes(memberSearchTerm.toLowerCase()))
@@ -178,35 +176,6 @@ export default function PerformanceDashboardPage() {
       }
     };
   }, []);
-
-  useEffect(() => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduceMotion) {
-      setLeaderboardAnimationProgress(1);
-      return;
-    }
-
-    let animationFrame = 0;
-    const duration = 950;
-    const startTime = performance.now();
-
-    const tick = (time: number) => {
-      const progress = Math.min((time - startTime) / duration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-
-      setLeaderboardAnimationProgress(easedProgress);
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(tick);
-      }
-    };
-
-    setLeaderboardAnimationProgress(0);
-    animationFrame = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(animationFrame);
-  }, [leaderboardAnimationKey]);
 
   return (
     <>
@@ -316,8 +285,12 @@ export default function PerformanceDashboardPage() {
                 <div className="performance-leaderboard-member">
                   <strong>{member.name}</strong>
                   <div className="performance-leaderboard-track">
-                    <span style={{ width: `${(member.ajScore / topPerformerScore) * 100 * leaderboardAnimationProgress}%` }}>
-                      {Math.round(member.ajScore * leaderboardAnimationProgress).toLocaleString()}
+                    <span
+                      style={{
+                        '--leaderboard-width': `${(member.ajScore / topPerformerScore) * 100}%`,
+                      } as CSSProperties}
+                    >
+                      {member.ajScore.toLocaleString()}
                     </span>
                   </div>
                 </div>

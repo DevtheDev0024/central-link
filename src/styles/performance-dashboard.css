@@ -1269,7 +1269,8 @@
 
 .performance-leaderboard-track span {
   display: flex;
-  min-width: 34px;
+  overflow: hidden;
+  width: var(--leaderboard-width);
   height: 100%;
   align-items: center;
   justify-content: flex-end;
@@ -1280,6 +1281,25 @@
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
+  animation: performance-leaderboard-fill 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  white-space: nowrap;
+  will-change: width;
+}
+
+@keyframes performance-leaderboard-fill {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--leaderboard-width);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .performance-leaderboard-track span {
+    animation: none;
+  }
 }
 
 .performance-leaderboard-item b {
