@@ -81,7 +81,9 @@
   max-width: 28rem;
   margin: 1.35rem 0 0;
   color: rgba(255, 255, 255, 0.72);
+  font-family: 'MyriadPro-Regular', Arial, sans-serif;
   font-size: clamp(0.96rem, 1.1vw, 1.05rem);
+  font-weight: 400;
   line-height: 1.7;
 }
 
@@ -120,16 +122,6 @@
   border-left: 1px solid rgba(255, 255, 255, 0.12);
   padding: clamp(0.5rem, 2vw, 1rem) 0 clamp(3rem, 6vw, 5rem) clamp(3rem, 5vw, 5rem);
   background: transparent;
-}
-
-.contact-form-kicker {
-  margin: 0 0 1.25rem;
-  color: var(--landing-gold-light, #f4dc8a);
-  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .contact-form {
@@ -182,9 +174,11 @@
 }
 
 .contact-form-field textarea {
-  resize: vertical;
+  height: 7.5rem;
   min-height: 7.5rem;
+  max-height: 7.5rem;
   border-radius: 1.35rem;
+  resize: none;
 }
 
 .contact-form-field input::placeholder,
@@ -283,9 +277,9 @@
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   padding: 1.35rem 0 1.75rem;
   color: rgba(255, 255, 255, 0.62);
-  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-family: 'MyriadPro-Regular', Arial, sans-serif;
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
 }

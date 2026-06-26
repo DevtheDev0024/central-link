@@ -43,7 +43,6 @@ export default function ContactSection({ className }: ContactSectionProps) {
         </div>
 
         <div className="contact-shell-form" aria-label="Contact form">
-          <p className="contact-form-kicker">Send a message</p>
           <ContactForm />
         </div>
       </div>

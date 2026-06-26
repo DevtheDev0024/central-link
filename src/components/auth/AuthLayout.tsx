@@ -4,23 +4,19 @@ import '../../styles/auth.css';
 
 type AuthLayoutProps = {
   title: string;
-  description: string;
   children: React.ReactNode;
   backHref?: string;
   backLabel?: string;
-  navLabel?: string;
-  navYear?: string;
 };
 
 export default function AuthLayout({
   title,
-  description,
   children,
   backHref = '/',
   backLabel = 'Back to Home',
-  navLabel = 'Member Portal',
-  navYear = '2025/2026',
 }: AuthLayoutProps) {
+  const titleParts = title.split(/\s+/).filter(Boolean);
+
   return (
     <div className="auth-page">
       <header className="auth-nav">
@@ -30,11 +26,6 @@ export default function AuthLayout({
             <span>Central Link Toastmasters Club</span>
           </Link>
 
-          <div className="auth-nav-meta">
-            <span>{navLabel}</span>
-            <strong>{navYear}</strong>
-          </div>
-
           <Link to={backHref} className="auth-back-link">
             <ArrowLeft size={14} aria-hidden="true" />
             {backLabel}
@@ -43,10 +34,12 @@ export default function AuthLayout({
       </header>
 
       <main className="auth-main">
-        <div className="auth-hero">
-          <img src="/toastmasters-logo.png" alt="" aria-hidden="true" className="auth-hero-logo" />
-          <h1>{title}</h1>
-          <p className="auth-description">{description}</p>
+        <div className="auth-main-copy">
+          <h1>
+            {titleParts.map((part, index) => (
+              <span key={`${part}-${index}`}>{part}</span>
+            ))}
+          </h1>
         </div>
 
         {children}

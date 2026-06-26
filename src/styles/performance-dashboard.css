@@ -1158,7 +1158,8 @@
   line-height: 1;
 }
 
-.performance-fees-card > button {
+.performance-fees-card > button,
+.performance-fees-action {
   display: flex;
   width: 68%;
   align-items: center;
@@ -1174,6 +1175,7 @@
   font-family: 'MyriadPro-Semibold', Arial, sans-serif;
   font-size: 1rem;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .performance-badges-card {

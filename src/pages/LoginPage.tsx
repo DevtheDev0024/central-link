@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Lock, Mail } from 'lucide-react';
+import { ArrowRight, Lock, Mail } from 'lucide-react';
 import AuthLayout from '../components/auth/AuthLayout';
 import { AuthInput } from '../components/auth/AuthInput';
 import { useAuth } from '../context/AuthContext';
@@ -62,13 +62,12 @@ export default function LoginPage() {
 
   return (
     <AuthLayout
-      navLabel="Member Portal"
       title="Member Portal"
-      description="Sign in with the email and password provided by your club officers."
       backLabel="Back to Home"
     >
       <form className="auth-card auth-signin-card" onSubmit={handleSubmit}>
         <div className="auth-card-header">
+          <span className="auth-card-eyebrow">Member access</span>
           <h2 className="auth-card-title">Sign In</h2>
           <p className="auth-card-intro">
             Use your member email and password to access the member portal for 2025/2026.
@@ -103,7 +102,7 @@ export default function LoginPage() {
         />
 
         <button type="submit" className="auth-submit" disabled={submitting}>
-          <Lock size={16} aria-hidden="true" />
+          {submitting ? <Lock size={16} aria-hidden="true" /> : <ArrowRight size={17} aria-hidden="true" />}
           {submitting ? 'Signing in…' : 'Continue'}
         </button>
 
@@ -112,7 +111,6 @@ export default function LoginPage() {
         </button>
 
         <div className="auth-card-footnotes">
-          <p>Secured through Firebase Authentication. Browser storage does not contain sheet credentials.</p>
           <p>© 2026 Central Link Toastmasters. Member access only.</p>
         </div>
       </form>

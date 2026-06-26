@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { ChevronRight } from 'lucide-react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { BADGE_CALCULATOR_RULES } from '../../data/badgeCalculatorRules';
 import { BADGE_DEFINITIONS } from '../../data/badgeDefinitions';
 import type { BadgeDefinition } from '../../types/badges';
@@ -12,6 +12,7 @@ import { getMemberBadges } from '../../utils/badgeLogic';
 import { getLeaderboardDisplayMax } from '../../utils/leaderboard';
 import { getMemberPaymentSummary } from '../../data/memberPayments';
 import type { MemberPortalOutletContext } from './MemberPortalLayout';
+import { MEMBER_PORTAL_BASE } from './navItems';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
 import MemberPerformanceSection from '../dashboard/MemberPerformanceSection';
@@ -345,7 +346,9 @@ export default function PerformanceDashboardPage() {
             </div>
             <div><span>Amount</span><strong>{paymentSummary?.amountLabel ?? 'LKR 500'}</strong></div>
           </div>
-          <button type="button">Open Payment Portal</button>
+          <Link to={`${MEMBER_PORTAL_BASE}/monthly-fee-portal`} className="performance-fees-action">
+            Open Payment Portal
+          </Link>
         </article>
 
         <article className="performance-card performance-badges-card">
