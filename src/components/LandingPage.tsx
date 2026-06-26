@@ -46,6 +46,8 @@ export default function LandingPage() {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealElements = page.querySelectorAll<HTMLElement>('[data-landing-reveal]');
+    const nav = page.querySelector<HTMLElement>('.landing-nav');
+    const hero = page.querySelector<HTMLElement>('.landing-hero');
     const ribbon = page.querySelector<HTMLElement>('.landing-ribbon');
     const story = page.querySelector<HTMLElement>('.landing-story');
 
@@ -70,11 +72,12 @@ export default function LandingPage() {
 
     const updateBackgroundScale = () => {
       const scrollY = window.scrollY;
+      const navOverlap = (nav?.getBoundingClientRect().bottom ?? 80) - (hero?.getBoundingClientRect().top ?? 320);
       const navProgress = reducedMotion
-        ? scrollY > 80
+        ? navOverlap >= 0
           ? 1
           : 0
-        : Math.min(Math.max(scrollY / 140, 0), 1);
+        : Math.min(Math.max(navOverlap / 120, 0), 1);
       const progress = Math.min(scrollY / scrollRange, 1);
       const ribbonProgress = Math.min(Math.max((scrollY + window.innerHeight * 1.5 - ribbonTop) / ribbonTravel, 0), 1);
       const storyViewportTop = storyTop - scrollY;
