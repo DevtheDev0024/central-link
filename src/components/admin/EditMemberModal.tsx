@@ -134,7 +134,7 @@ export default function EditMemberModal({ member, isOpen, onClose, onUpdated }: 
             <label htmlFor="edit-membership-number">Membership number</label>
             <input
               id="edit-membership-number"
-              placeholder="e.g. TM-1024"
+              placeholder="e.g. PN-1024"
               value={membershipNumber}
               onChange={(event) => setMembershipNumber(event.target.value)}
             />

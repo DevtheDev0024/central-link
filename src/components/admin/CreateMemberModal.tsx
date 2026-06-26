@@ -152,7 +152,7 @@ export default function CreateMemberModal({ isOpen, onClose, onCreated }: Create
             <label htmlFor="create-membership-number">Membership number</label>
             <input
               id="create-membership-number"
-              placeholder="e.g. TM-1024"
+              placeholder="e.g. PN-1024"
               value={membershipNumber}
               onChange={(event) => setMembershipNumber(event.target.value)}
             />

@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const getIdToken = useCallback(async () => {
     if (!auth.currentUser) return null;
-    return auth.currentUser.getIdToken();
+    return auth.currentUser.getIdToken(true);
   }, []);
 
   const isAdmin = isAdminEmail(user?.email);

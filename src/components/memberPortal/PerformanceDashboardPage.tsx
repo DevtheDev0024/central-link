@@ -76,31 +76,16 @@ export default function PerformanceDashboardPage() {
     return clubMembers.find((member) => member.name.trim().toLowerCase() === targetName) ?? null;
   }, [clubMembers, membershipNumber, displayName]);
 
-  const currentMemberRank = useMemo(() => {
-    if (!currentMember) return null;
-    const ranked = [...clubMembers].sort((first, second) => second.ajScore - first.ajScore);
-    const index = ranked.findIndex((member) => member.name === currentMember.name);
-    return index >= 0 ? index + 1 : null;
-  }, [clubMembers, currentMember]);
-
   // Per-member cards fall back to the UI-development placeholders until a
   // matching member exists in the sheet. Fields without a sheet column
   // (speeches, meetings attended, week streak, pathway, level) stay as stubs.
   const heroName = displayName.trim() || 'Member';
   const heroPoints = currentMember ? currentMember.totalPoints.toLocaleString() : '312';
   const metrics = [
-    { label: 'Speeches Delivered', value: '8', note: '2 this term' },
-    {
-      label: 'Roles Taken',
-      value: currentMember ? String(currentMember.meetingRoles.length) : '14',
-      note: '+5 this term',
-    },
-    { label: 'Meetings Attended', value: '10', note: '92% Attendance' },
-    {
-      label: 'Member Points',
-      value: currentMember ? currentMember.totalPoints.toLocaleString() : '312',
-      note: currentMemberRank ? `Rank #${currentMemberRank} in Club` : 'Rank #2 in Club',
-    },
+    { label: 'Speeches Delivered', value: '-', note: '-' },
+    { label: 'Roles Taken', value: '-', note: '-' },
+    { label: 'Meetings Attended', value: '-', note: '-' },
+    { label: 'Member Points', value: '-', note: '-' },
   ];
 
   // Earned badges are derived from the member's points via the same benchmark
