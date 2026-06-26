@@ -1,5 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
+import AdminDashboardLayout from './components/admin/AdminDashboardLayout';
+import AdminInDevelopmentPage from './components/admin/AdminInDevelopmentPage';
+import { adminNavItems } from './components/admin/navItems';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import InDevelopmentPage from './components/memberPortal/InDevelopmentPage';
 import MemberPortalLayout from './components/memberPortal/MemberPortalLayout';
@@ -33,10 +36,21 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute adminOnly>
-              <AdminPanelPage />
+              <AdminDashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<AdminPanelPage />} />
+          {adminNavItems
+            .filter((item) => item.slug)
+            .map((item) => (
+              <Route
+                key={item.slug}
+                path={item.slug}
+                element={<AdminInDevelopmentPage title={item.label} />}
+              />
+            ))}
+        </Route>
         <Route
           path="/member"
           element={

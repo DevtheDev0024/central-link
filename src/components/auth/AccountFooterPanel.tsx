@@ -6,6 +6,7 @@ type AccountFooterPanelProps = {
   displayName?: string | null;
   onSignOut: () => void;
   onChangePassword?: () => void;
+  hideChangePasswordIcon?: boolean;
   variant?: 'on-dark' | 'on-light';
   className?: string;
 };
@@ -24,6 +25,7 @@ export default function AccountFooterPanel({
   displayName,
   onSignOut,
   onChangePassword,
+  hideChangePasswordIcon = false,
   variant = 'on-light',
   className,
 }: AccountFooterPanelProps) {
@@ -54,7 +56,7 @@ export default function AccountFooterPanel({
           className={`change-password-button${variant === 'on-dark' ? ' is-on-dark' : ''}`}
           onClick={onChangePassword}
         >
-          <KeyRound size={14} aria-hidden="true" />
+          {hideChangePasswordIcon ? null : <KeyRound size={14} aria-hidden="true" />}
           Change password
         </button>
       ) : null}

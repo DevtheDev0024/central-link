@@ -163,26 +163,21 @@ export default function LandingPage<DashboardKey extends string>({
 
       <main className="landing-main">
         <section className="landing-hero" aria-labelledby="landing-title">
-          <div className="landing-kicker animate-fade-rise">
-            <span />
-            Member Growth Portal
-          </div>
-
           <h1
             id="landing-title"
             className="landing-title animate-fade-rise-delay"
-            aria-label="Welcome to the Central Link Toastmasters Member Dashboard"
+            aria-label="Welcome to Central Link Toastmasters"
           >
             <span aria-hidden="true" className="landing-title-light">
-              Welcome to the
+              Welcome to
             </span>
             <em aria-hidden="true">Central Link Toastmasters</em>
-            <span aria-hidden="true">Member Dashboard</span>
           </h1>
 
           <p className="landing-description animate-fade-rise-delay-2">
-            Track your growth, celebrate your achievements, and explore your journey as a Central
-            Link Toastmaster. Select the dashboard year you would like to view.
+            Discover our club, connect with our community, and explore the meetings, stories, and
+            opportunities that make Central Link Toastmasters a place to practice communication and
+            leadership.
           </p>
 
           <div className="landing-club-note animate-fade-rise-delay-2">
