@@ -1,14 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
-import { Bell, ChevronRight, Menu, Search } from 'lucide-react';
+import { Bell, ChevronDown, ChevronRight, Menu, Search } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AccountFooterPanel from '../auth/AccountFooterPanel';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
+import { DASHBOARD_SOURCES, type DashboardYearKey } from '../../config/dashboardYears';
 import { useAuth } from '../../context/AuthContext';
 import { useMemberProfile } from '../../hooks/useMemberProfile';
 import { LOGIN_SIGNED_OUT_STATE } from '../../lib/authNavigation';
 import { MEMBER_PORTAL_BASE, memberPortalNav } from './navItems';
 import '../../styles/auth.css';
 import '../../styles/performance-dashboard.css';
+
+const programOptions = (Object.entries(DASHBOARD_SOURCES) as Array<
+  [DashboardYearKey, (typeof DASHBOARD_SOURCES)[DashboardYearKey]]
+>).map(([key, source]) => ({
+  key,
+  label: source.label.replace(' Dashboard', ''),
+}));
 
 function useActiveLabel() {
   const { pathname } = useLocation();
@@ -45,6 +53,7 @@ export default function MemberPortalLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [selectedProgramKey, setSelectedProgramKey] = useState<DashboardYearKey>(programOptions[0].key);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const closeMenu = () => setIsMenuOpen(false);
   const activeLabel = useActiveLabel();
@@ -152,6 +161,20 @@ export default function MemberPortalLayout() {
           </div>
 
           <div className="performance-topbar-actions">
+            <label className="performance-topbar-program">
+              <select
+                aria-label="Select programme year"
+                value={selectedProgramKey}
+                onChange={(event) => setSelectedProgramKey(event.target.value as DashboardYearKey)}
+              >
+                {programOptions.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={16} aria-hidden="true" />
+            </label>
             <label className="performance-search">
               <Search size={19} />
               <input type="search" placeholder="Search dashboard" aria-label="Search dashboard" />

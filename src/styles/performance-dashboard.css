@@ -285,6 +285,38 @@
   gap: 12px;
 }
 
+.performance-topbar-program {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  border-bottom: 1px solid #8c9aa2;
+  color: #004165;
+}
+
+.performance-topbar-program select {
+  width: auto;
+  max-width: 10rem;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  padding: 0 1.2rem 0.18rem 0;
+  background: transparent;
+  color: #004165;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.performance-topbar-program svg {
+  position: absolute;
+  right: 0;
+  color: #004165;
+  pointer-events: none;
+}
+
 .performance-search {
   display: flex;
   width: min(260px, 22vw);
@@ -1929,6 +1961,11 @@
 
   .performance-search {
     display: none;
+  }
+
+  .performance-topbar-program select {
+    max-width: 8.4rem;
+    font-size: 0.82rem;
   }
 
   .performance-content {
