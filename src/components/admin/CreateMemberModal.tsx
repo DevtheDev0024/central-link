@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { RefreshCw, X } from 'lucide-react';
+import { Copy, RefreshCw, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { createMemberAccount } from '../../lib/api';
 import { CLUB_ROLES } from '../../types/memberAccount';
@@ -30,6 +30,7 @@ export default function CreateMemberModal({ isOpen, onClose, onCreated }: Create
   const [emergencyContactNumber, setEmergencyContactNumber] = useState('');
   const [clubRole, setClubRole] = useState<string>('Member');
   const [password, setPassword] = useState(generatePassword);
+  const [copied, setCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,6 +55,7 @@ export default function CreateMemberModal({ isOpen, onClose, onCreated }: Create
     setEmergencyContactNumber('');
     setClubRole('Member');
     setPassword(generatePassword());
+    setCopied(false);
     setError(null);
   };
 
@@ -93,6 +95,15 @@ export default function CreateMemberModal({ isOpen, onClose, onCreated }: Create
     }
   };
 
+  const handleCopyPassword = async () => {
+    try {
+      await navigator.clipboard.writeText(password);
+      setCopied(true);
+    } catch {
+      setError('Unable to copy password. Please copy it manually.');
+    }
+  };
+
   return (
     <div className="admin-modal-backdrop" onClick={handleClose} role="presentation">
       <div
@@ -104,11 +115,10 @@ export default function CreateMemberModal({ isOpen, onClose, onCreated }: Create
       >
         <div className="admin-modal-header">
           <div>
-            <p className="admin-modal-eyebrow">New Member</p>
             <h2 id="create-member-title">Create User Account</h2>
           </div>
           <button type="button" className="admin-modal-close" onClick={handleClose} aria-label="Close">
-            <X size={18} aria-hidden="true" />
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
 
@@ -193,14 +203,27 @@ export default function CreateMemberModal({ isOpen, onClose, onCreated }: Create
               <button
                 type="button"
                 className="admin-password-regenerate"
-                onClick={() => setPassword(generatePassword())}
+                onClick={() => {
+                  setPassword(generatePassword());
+                  setCopied(false);
+                }}
               >
                 <RefreshCw size={14} aria-hidden="true" />
                 Regenerate
               </button>
             </div>
-            <input className="admin-password-display" value={password} readOnly aria-label="Generated password" />
-            <p>Share these credentials with the member — they can change the password after first sign-in.</p>
+            <div className="admin-password-display-row">
+              <input className="admin-password-display" value={password} readOnly aria-label="Generated password" />
+              <button
+                type="button"
+                className={`admin-password-copy${copied ? ' is-copied' : ''}`}
+                onClick={handleCopyPassword}
+                aria-label={copied ? 'Password copied' : 'Copy password'}
+              >
+                <Copy size={15} aria-hidden="true" />
+              </button>
+            </div>
+            <p>Share these credentials with the member for their first sign-in.</p>
           </div>
 
           <div className="admin-modal-actions">

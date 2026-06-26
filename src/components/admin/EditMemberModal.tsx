@@ -100,7 +100,7 @@ export default function EditMemberModal({ member, isOpen, onClose, onUpdated }: 
             <h2 id="edit-member-title">Update User Account</h2>
           </div>
           <button type="button" className="admin-modal-close" onClick={onClose} aria-label="Close">
-            <X size={18} aria-hidden="true" />
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
 
