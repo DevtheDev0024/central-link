@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import Confetti from 'react-confetti';
 import type { Member } from '../../types/member';
+import { getLeaderboardDisplayMax } from '../../utils/leaderboard';
 import SimpleBarChart from './SimpleBarChart';
 
 type TopPerformersSectionProps = {
@@ -21,6 +22,10 @@ export default function TopPerformersSection({ members, lastUpdated }: TopPerfor
   const topPerformerChartData = useMemo(() => {
     return topPerformers.map((m) => ({ name: m.name.split(' ')[0], value: m.ajScore }));
   }, [topPerformers]);
+  const leaderboardDisplayMax = useMemo(
+    () => getLeaderboardDisplayMax(topPerformers.map((member) => member.ajScore)),
+    [topPerformers],
+  );
 
   return (
     <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
@@ -87,6 +92,7 @@ export default function TopPerformersSection({ members, lastUpdated }: TopPerfor
         title="Top 5 Performers"
         color="bg-gradient-to-r from-toastmasters-navy to-toastmasters-navy-light"
         animationKey={lastUpdated}
+        maxValue={leaderboardDisplayMax}
       />
     </section>
   );

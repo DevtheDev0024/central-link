@@ -5,11 +5,12 @@ type SimpleBarChartProps = {
   title: string;
   color: string;
   animationKey: string;
+  maxValue?: number;
 };
 
-export default function SimpleBarChart({ data, title, color, animationKey }: SimpleBarChartProps) {
+export default function SimpleBarChart({ data, title, color, animationKey, maxValue: maxValueProp }: SimpleBarChartProps) {
   const [animationProgress, setAnimationProgress] = useState(0);
-  const maxValue = Math.max(...data.map((d) => d.value), 1);
+  const maxValue = Math.max(maxValueProp ?? 0, ...data.map((d) => d.value), 1);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

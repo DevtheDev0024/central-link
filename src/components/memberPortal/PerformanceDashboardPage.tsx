@@ -9,6 +9,7 @@ import type { Member } from '../../types/member';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { useMemberProfile } from '../../hooks/useMemberProfile';
 import { getMemberBadges } from '../../utils/badgeLogic';
+import { getLeaderboardDisplayMax } from '../../utils/leaderboard';
 import type { MemberPortalOutletContext } from './MemberPortalLayout';
 import BadgeDetailOverlay from '../dashboard/BadgeDetailOverlay';
 import BadgeGridSection from '../dashboard/BadgeGridSection';
@@ -110,7 +111,10 @@ export default function PerformanceDashboardPage() {
   const topPerformers = useMemo(() => {
     return [...clubMembers].sort((first, second) => second.ajScore - first.ajScore).slice(0, 5);
   }, [clubMembers]);
-  const topPerformerScore = Math.max(...topPerformers.map((member) => member.ajScore), 1);
+  const leaderboardDisplayMax = useMemo(
+    () => getLeaderboardDisplayMax(topPerformers.map((member) => member.ajScore)),
+    [topPerformers],
+  );
 
   const visibleMembers = clubMembers
     .filter((member) => member.name.toLowerCase().includes(memberSearchTerm.toLowerCase()))
@@ -368,7 +372,7 @@ export default function PerformanceDashboardPage() {
                   <div className="performance-leaderboard-track">
                     <span
                       style={{
-                        '--leaderboard-width': `${(member.ajScore / topPerformerScore) * 100 * leaderboardAnimationProgress}%`,
+                        '--leaderboard-width': `${(member.ajScore / leaderboardDisplayMax) * 100 * leaderboardAnimationProgress}%`,
                       } as CSSProperties}
                     >
                       {Math.round(member.ajScore * leaderboardAnimationProgress).toLocaleString()}

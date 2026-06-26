@@ -374,6 +374,7 @@
   transition: background 160ms ease, color 160ms ease;
 }
 
+.performance-icon-button.is-open,
 .performance-icon-button:hover {
   background: rgba(0, 65, 101, 0.08);
   color: #004165;
@@ -419,6 +420,97 @@
 
 .performance-profile-menu-wrap {
   position: relative;
+}
+
+.performance-notification-menu-wrap {
+  position: relative;
+}
+
+.performance-notification-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 70;
+  width: min(22rem, calc(100vw - 2rem));
+  overflow: hidden;
+  border: 1px solid #dfe3e5;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 14px 35px rgba(16, 35, 56, 0.12);
+  color: #102338;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+}
+
+.performance-notification-menu-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 13px;
+  border-bottom: 1px solid #e4e6e8;
+}
+
+.performance-notification-menu-header strong {
+  display: block;
+  color: var(--pd-maroon);
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.performance-notification-menu-body {
+  padding: 20px 16px;
+}
+
+.performance-notification-menu-empty {
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.performance-notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.performance-notification-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid #e7ecef;
+  border-radius: 16px;
+  padding: 14px;
+  background: #f9fbfc;
+}
+
+.performance-notification-item strong {
+  display: block;
+  color: #004165;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.performance-notification-item p {
+  margin-top: 4px;
+  color: #415262;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.performance-notification-item time {
+  flex: 0 0 auto;
+  color: #8b9298;
+  font-family: 'MyriadPro-Semibold', Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .performance-profile-menu {
